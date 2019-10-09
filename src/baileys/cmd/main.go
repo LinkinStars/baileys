@@ -75,6 +75,11 @@ func main() {
 		TableNameSuffix = conf.All.TableNameSuffix
 		TableCommentSuffix = conf.All.TableCommentSuffix
 
+		// 将配置文件中的映射关系表保存
+		for _, value := range conf.All.SpecialMapping {
+			util.SpecialMapper[value] = true
+		}
+
 		// 连接数据库
 		tables, err := GetRawTablesData(conf.All.Connection)
 		if err != nil {
@@ -102,21 +107,16 @@ func main() {
 			if !conf.All.GenFileSuffix {
 				tpl.FilenameSuffix = ".go"
 			}
-			if path, ok := conf.All.EveryTplGenPath[tpl.FilenameExt]; ok {
+			if path, ok := conf.All.EveryTplGenPath[tpl.Filename]; ok {
 				tpl.OutputPath = path
 			}
 		}
 
 		for _, tpl := range oneTplList {
 			tpl.FilenameSuffix = tpl.Filename + ".go"
-			if path, ok := conf.All.OneTplGenPath[tpl.FilenameExt]; ok {
+			if path, ok := conf.All.OneTplGenPath[tpl.Filename]; ok {
 				tpl.OutputPath = path
 			}
-		}
-
-		// 将配置文件中的映射关系表保存
-		for _, value := range conf.All.SpecialMapping {
-			util.SpecialMapper[value] = true
 		}
 
 		data := make(map[string]interface{}, 0)

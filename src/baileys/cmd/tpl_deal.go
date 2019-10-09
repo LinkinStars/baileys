@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"strings"
 	"text/template"
 
 	"baileys/entity"
@@ -18,6 +19,9 @@ func ReadDirGetTemplate(path string, tplFunc template.FuncMap) (tplList []*entit
 	}
 
 	for _, f := range files {
+		if !strings.Contains(f.Name(), ".tpl") {
+			continue
+		}
 		tpl, err := CreateTemplate(path+f.Name(), tplFunc)
 		if err != nil {
 			return tplList, err
