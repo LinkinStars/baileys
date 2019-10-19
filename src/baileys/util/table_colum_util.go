@@ -130,9 +130,8 @@ func CreateXORMTag(table *core.Table, col *core.Column) string {
 	}
 	if len(tags) > 0 {
 		return "`" + strings.Join(tags, " ") + "`"
-	} else {
-		return ""
 	}
+	return ""
 }
 
 func include(source []string, target string) bool {
@@ -156,7 +155,7 @@ func CreateValTag(col *core.Column, typeStr string) string {
 
 	if col.SQLType.Name == core.Enum {
 		tag += ",oneof="
-		for option, _ := range col.EnumOptions {
+		for option := range col.EnumOptions {
 			tag += option + " "
 		}
 		tag = strings.TrimSpace(tag) + `"`

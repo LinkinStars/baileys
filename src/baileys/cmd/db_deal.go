@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	// 表名后缀
+	// TableNameSuffix 表名后缀
 	TableNameSuffix = ""
-	// 表注释后缀
+	// TableCommentSuffix 表注释后缀
 	TableCommentSuffix = ""
 )
 
