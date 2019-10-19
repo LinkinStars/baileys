@@ -6,3 +6,7 @@ type {{ .UpperCamelName}} struct {
 {{end}}
 }
 
+// TableName {{ .Comment}} 表名
+func ({{ .UpperCamelName}}) TableName() string {
+    return "{{ .UnderlineName}}"
+}

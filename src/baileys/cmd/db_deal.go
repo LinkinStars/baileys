@@ -6,15 +6,19 @@ import (
 	"github.com/go-xorm/xorm"
 	"xorm.io/core"
 
+	"baileys/conf"
 	"baileys/entity"
 	"baileys/util"
 )
 
 var (
-	TableNameSuffix    = "_tab"
-	TableCommentSuffix = "表"
+	// 表名后缀
+	TableNameSuffix = ""
+	// 表注释后缀
+	TableCommentSuffix = ""
 )
 
+// GetRawTablesData 获取源数据
 func GetRawTablesData(connection string) (tables []*core.Table, err error) {
 	// 修改为配置文件读取
 	engine, err := xorm.NewEngine("mysql", connection)
@@ -34,7 +38,7 @@ func GetRawTablesData(connection string) (tables []*core.Table, err error) {
 	return tables, err
 }
 
-// 将原数据转换成模型
+// ConvertRawData2Model 将原数据转换成模型
 func ConvertRawData2Model(tables []*core.Table) (tableData []*entity.TableData) {
 	tableData = make([]*entity.TableData, 0, len(tables))
 
@@ -53,8 +57,14 @@ func ConvertRawData2Model(tables []*core.Table) (tableData []*entity.TableData) 
 		for _, column := range columns {
 			fd := entity.FieldData{}
 
-			fd.UpperCamelName = util.SqlStr2GoStr(column.Name)
-			fd.LowerCamelName = util.UpperToLowerCamel(fd.UpperCamelName)
+			// 如果用户的命名是小驼峰就用小驼峰转大驼峰
+			if conf.All.IsLowerCamelName {
+				fd.UpperCamelName = util.LowerToUpperCamel(column.Name)
+				fd.LowerCamelName = column.Name
+			} else {
+				fd.UpperCamelName = util.SqlStr2GoStr(column.Name)
+				fd.LowerCamelName = util.UpperToLowerCamel(fd.UpperCamelName)
+			}
 			fd.UnderlineName = column.Name
 
 			fd.Comment = column.Comment

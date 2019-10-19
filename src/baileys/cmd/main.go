@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"net/http"
 	"text/template"
@@ -20,18 +21,33 @@ var (
 		"UnderlineStr2Strikethrough": util.UnderlineStr2Strikethrough,
 		"ChangeValTagForUpdate":      util.ChangeValTagForUpdate,
 	}
+
 	// 读取模板文件列表
 	everyTplPath = "./tpl/every/"
 	oneTplPath   = "./tpl/one/"
 	genRootPath  = "./gen/"
+
+	// 模板和数据
 	everyTplList []*entity.TplModel
 	oneTplList   []*entity.TplModel
 	tableData    []*entity.TableData
+
+	// 默认配置文件路径
+	confPath = "./conf/conf.yml"
+	// 默认端口号
+	webPort = "5272"
 )
 
+func init() {
+	flag.StringVar(&confPath, "c", "./conf/conf.yml", "default config path")
+	flag.StringVar(&webPort, "p", "5272", "default web port")
+}
+
 func main() {
-	if err := conf.InitConfig("./conf/conf.yml"); err != nil {
-		panic(err)
+	flag.Parse()
+
+	if err := conf.InitConfig(confPath); err != nil {
+		panic("读取配置文件异常：" + err.Error())
 	}
 
 	router := gin.Default()
@@ -45,9 +61,7 @@ func main() {
 			return
 		}
 
-		fmt.Println(genReq)
-
-		// 将用户选选中的模板和表格保存起来
+		// 将用户选中的模板和表格保存起来
 		chooseTableMap, chooseTplMap := make(map[string]bool, 0), make(map[string]bool, 0)
 		for _, tableName := range genReq.GenTableNameList {
 			chooseTableMap[tableName] = true
@@ -64,7 +78,7 @@ func main() {
 		}
 	})
 
-	router.GET("/index", func(context *gin.Context) {
+	router.GET("", func(context *gin.Context) {
 		err := conf.InitConfig("./conf/conf.yml")
 		if err != nil {
 			context.JSON(http.StatusOK, "读取配置文件出现异常："+err.Error())
@@ -126,11 +140,11 @@ func main() {
 
 		context.HTML(http.StatusOK, "index.html", data)
 	})
-	err := util.OpenBrowser("http://127.0.0.1:" + conf.All.HttpPort + "/index")
+	err := util.OpenBrowser("http://127.0.0.1:" + webPort)
 	if err != nil {
 		panic(err)
 	}
-	err = router.Run(":" + conf.All.HttpPort)
+	err = router.Run(":" + webPort)
 	if err != nil {
 		panic(err)
 	}
@@ -151,7 +165,19 @@ func Gen(chooseTableMap, chooseTplMap map[string]bool) (err error) {
 		}
 	}
 
-	// 创建对应文件生成的目录，这个目录后期可能会传入的
+	// 循环一遍数据表，确定用户选中的表
+	userChooseTable := make([]*entity.TableData, 0)
+	for _, v := range tableData {
+		if chooseTableMap[v.UpperCamelName] {
+			userChooseTable = append(userChooseTable, v)
+		}
+	}
+
+	if len(userChooseTable) == 0 {
+		return errors.New("未选中任何表")
+	}
+
+	// 创建对应文件生成的目录
 	err = CreateGenPathList(tempEveryTplList)
 	if err != nil {
 		return errors.New("创建文件夹异常：" + err.Error())
@@ -162,16 +188,18 @@ func Gen(chooseTableMap, chooseTplMap map[string]bool) (err error) {
 	}
 
 	// 生成every文件夹下模板对应的文件
-	for _, v := range tableData {
-		if !chooseTableMap[v.UpperCamelName] {
-			continue
-		}
-		fmt.Println(v.UpperCamelName, v.Comment)
+	for _, v := range userChooseTable {
+		fmt.Println("生成：", v.UpperCamelName, v.Comment)
 		for _, tpl := range tempEveryTplList {
 			err := GenFile(tpl.Tpl, tpl.OutputPath, v.UnderlineName+tpl.FilenameSuffix, v)
 			if err != nil {
 				return errors.New("生成 模板：" + tpl.Filename + "表：" + v.UnderlineName + " 操作时异常：" + err.Error())
 			}
+		}
+
+		// 如果不需要导包那就继续
+		if !conf.All.AutoImport {
+			continue
 		}
 
 		// 全部生成之后再重新导入包这样才能导入完完整
@@ -185,9 +213,14 @@ func Gen(chooseTableMap, chooseTplMap map[string]bool) (err error) {
 
 	// 生成one文件夹下模板对应的文件
 	for _, tpl := range tempOneTplList {
-		err := GenFile(tpl.Tpl, tpl.OutputPath, tpl.FilenameSuffix, tableData)
+		err := GenFile(tpl.Tpl, tpl.OutputPath, tpl.FilenameSuffix, userChooseTable)
 		if err != nil {
 			return errors.New("生成 " + tpl.Filename + " 操作时异常：" + err.Error())
+		}
+
+		// 如果不需要导包那就继续
+		if !conf.All.AutoImport {
+			continue
 		}
 
 		err = FormatAndImport(tpl.OutputPath + tpl.FilenameSuffix)

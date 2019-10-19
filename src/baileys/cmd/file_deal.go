@@ -12,6 +12,7 @@ import (
 	"baileys/util"
 )
 
+// CreateGenPathList 创建目录
 func CreateGenPathList(tplList []*entity.TplModel) (err error) {
 	for _, tpl := range tplList {
 		err := util.CreateDirIfNotExist(tpl.OutputPath)
@@ -22,6 +23,7 @@ func CreateGenPathList(tplList []*entity.TplModel) (err error) {
 	return nil
 }
 
+// GenFile 创建文件
 func GenFile(tpl *template.Template, outputPath, filename string, dataModel interface{}) (err error) {
 	resBytes := bytes.NewBufferString("")
 	err = tpl.Execute(resBytes, dataModel)
@@ -47,6 +49,7 @@ func GenFile(tpl *template.Template, outputPath, filename string, dataModel inte
 	return nil
 }
 
+// FormatAndImport 格式化并导包
 func FormatAndImport(filename string) (err error) {
 	file, err := ioutil.ReadFile(filename)
 	if err != nil {

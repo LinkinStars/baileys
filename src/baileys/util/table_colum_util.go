@@ -19,6 +19,7 @@ func SqlStr2GoStr(str string) string {
 	return mapper.Table2Obj(str)
 }
 
+// CreateTypeString 从数据库中的类型对应得到golang中的数据类型
 func CreateTypeString(col *core.Column) string {
 	st := col.SQLType
 	t := core.SQLType2Type(st)
@@ -29,6 +30,7 @@ func CreateTypeString(col *core.Column) string {
 	return s
 }
 
+// CreateXORMTag 创建xorm的标签 来源于xorm中的方法，就不做注释了
 func CreateXORMTag(table *core.Table, col *core.Column) string {
 	var res []string
 	if !col.Nullable {
@@ -142,7 +144,7 @@ func include(source []string, target string) bool {
 	return false
 }
 
-// 生成实体类验证标签
+// CreateValTag 生成实体类验证标签
 func CreateValTag(col *core.Column, typeStr string) string {
 	tag := "validate:"
 
@@ -167,7 +169,7 @@ func CreateValTag(col *core.Column, typeStr string) string {
 	return tag
 }
 
-// 因为修改的时候字段均不是必填项
+// ChangeValTagForUpdate 因为修改的时候字段均不是必填项
 func ChangeValTagForUpdate(tag string) string {
 	return strings.ReplaceAll(tag, "required", "omitempty")
 }

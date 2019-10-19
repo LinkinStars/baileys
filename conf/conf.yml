@@ -1,14 +1,5 @@
-# web端口
-http_port: "5272"
-
 # mysql连接
 connection: "root:1qaz2wsx@(127.0.0.1:3306)/test?charset=utf8"
-
-# 表名的后缀，有些人喜欢将表名加上后缀 _tab 生成的时候需要去除 则在下方填入
-table_name_suffix: ""
-
-# 表名注释的后悔，如 ： 用户表，在生成的时候需要去掉最后一个 '表' 则在下方填入
-table_comment_suffix: ""
 
 # every文件夹下的所有模板 所对应的生成目录
 every_tpl_gen_path:
@@ -22,9 +13,21 @@ every_tpl_gen_path:
 # one文件夹下的所有模板 对应的生成目录
 one_tpl_gen_path:
   router: "./gen/router/"
+
+# 表名的后缀，有些人喜欢将表名加上后缀 _tab 生成的时候需要去除 则在下方填入
+table_name_suffix: "_tab"
+
+# 表名注释的后缀，如 ： 用户表，在生成的时候需要去掉最后一个 '表' 则在下方填入
+table_comment_suffix: "表"
   
-# 生成的文件是否包含后缀 如果为true生成的文件会添加模板的名称作为后缀，如user_model.go
+# 生成的文件是否包含后缀 如果为true，生成的文件会添加模板的名称作为后缀，如user_model.go
 gen_file_suffix: true
+
+# 是否进行自动导包，如果为true，会对生成的文件进行自动导包，所以生成的目录最好放在你的gopath下面
+auto_import: true
+
+# 数据库字段名称是否为小驼峰命名，如orderName，不建议使用小驼峰，这个配置可能会用于一些特殊用户
+table_field_name_is_lower_camel_name: false
 
 # 一些特殊的数据库映射关系，比如id，我们希望直接映射为ID 而不是 Id 也不要出现i_d
 mapping:

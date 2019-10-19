@@ -9,7 +9,7 @@ import (
 	"baileys/util"
 )
 
-// 读取文件夹将其中的文件制作成tpl模板
+// ReadDirGetTemplate 读取文件夹将其中的文件制作成tpl模板
 func ReadDirGetTemplate(path string, tplFunc template.FuncMap) (tplList []*entity.TplModel, err error) {
 	tplList = make([]*entity.TplModel, 0)
 
@@ -41,7 +41,7 @@ func ReadDirGetTemplate(path string, tplFunc template.FuncMap) (tplList []*entit
 	return tplList, err
 }
 
-// 创建模板
+// CreateTemplate 创建模板
 func CreateTemplate(tplPath string, tplFunc template.FuncMap) (tpl *template.Template, err error) {
 	bs, err := ioutil.ReadFile(tplPath)
 	if err != nil {

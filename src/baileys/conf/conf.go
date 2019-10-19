@@ -28,7 +28,6 @@ func InitConfig(path string) (err error) {
 
 // AllConfig 全部配置文件
 type AllConfig struct {
-	HttpPort   string `mapstructure:"http_port"`
 	Connection string `mapstructure:"connection"`
 
 	TableNameSuffix    string `mapstructure:"table_name_suffix"`
@@ -37,6 +36,9 @@ type AllConfig struct {
 	EveryTplGenPath map[string]string `mapstructure:"every_tpl_gen_path"`
 	OneTplGenPath   map[string]string `mapstructure:"one_tpl_gen_path"`
 
-	GenFileSuffix  bool     `mapstructure:"gen_file_suffix"`
+	GenFileSuffix    bool `mapstructure:"gen_file_suffix"`
+	AutoImport       bool `mapstructure:"auto_import"`
+	IsLowerCamelName bool `mapstructure:"table_field_name_is_lower_camel_name"`
+
 	SpecialMapping []string `mapstructure:"mapping"`
 }

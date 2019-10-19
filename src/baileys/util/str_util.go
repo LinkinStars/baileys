@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// 大驼峰转小驼峰
+// UpperToLowerCamel 大驼峰转小驼峰
 func UpperToLowerCamel(s string) string {
 	if s == "" {
 		return s
@@ -25,7 +25,15 @@ func UpperToLowerCamel(s string) string {
 	return str.String()
 }
 
-// 将下划线字符串转换为中划线
+// LowerToUpperCamel 小驼峰转大驼峰
+func LowerToUpperCamel(s string) string {
+	if s == "" {
+		return s
+	}
+	return strings.ToUpper(string(s[0])) + s[1:]
+}
+
+// UnderlineStr2Strikethrough 将下划线字符串转换为中划线
 func UnderlineStr2Strikethrough(str string) string {
 	return strings.ReplaceAll(str, "_", "-")
 }
