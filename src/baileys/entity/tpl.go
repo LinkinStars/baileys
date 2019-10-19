@@ -2,7 +2,7 @@ package entity
 
 import "text/template"
 
-// 生成模板时数据整合
+// TplModel 生成模板时数据整合
 type TplModel struct {
 	Tpl            *template.Template // 模板
 	Filename       string             //模板名称

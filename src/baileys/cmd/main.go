@@ -150,6 +150,7 @@ func main() {
 	}
 }
 
+// Gen 开始生成
 func Gen(chooseTableMap, chooseTplMap map[string]bool) (err error) {
 	// 只操作用户选中的模板
 	tempEveryTplList := make([]*entity.TplModel, 0)

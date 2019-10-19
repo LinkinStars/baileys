@@ -14,7 +14,7 @@ var (
 	mapper                    core.IMapper = SpecialMapper
 )
 
-// 数据库字段、表名转换为大驼峰的golang命名，并且会替换一些特殊的映射规则如：ID
+// SqlStr2GoStr 数据库字段、表名转换为大驼峰的golang命名，并且会替换一些特殊的映射规则如：ID
 func SqlStr2GoStr(str string) string {
 	return mapper.Table2Obj(str)
 }
@@ -30,7 +30,7 @@ func CreateTypeString(col *core.Column) string {
 	return s
 }
 
-// CreateXORMTag 创建xorm的标签 来源于xorm中的方法，就不做注释了
+// CreateXORMTag 创建xorm的标签
 func CreateXORMTag(table *core.Table, col *core.Column) string {
 	var res []string
 	if !col.Nullable {
