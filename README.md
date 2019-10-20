@@ -1,8 +1,11 @@
 # Baileys —— 从数据库到代码的自动生成工具
 
+<img align="right" width="159px" src="https://raw.githubusercontent.com/LinkinStars/baileys/master/doc/logo.png">
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/LinkinStars/baileys)](https://goreportcard.com/report/github.com/LinkinStars/baileys)  
 
-修改配置文件，修改模板，点击生成，从数据库到代码的一键生成完成！从此golang的web开发也可以非常简单~ 你只有更快的拧螺丝，才有机会造火箭。
+修改配置文件，修改模板，点击生成，从数据库到代码的一键生成完成！  
+从此golang的web开发也可以非常简单~   正所谓，只有更快的拧螺丝，才有时间造火箭。
 
 ![](./doc/show.gif)
 
