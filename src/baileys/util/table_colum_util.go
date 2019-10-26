@@ -14,8 +14,8 @@ var (
 	mapper                    core.IMapper = SpecialMapper
 )
 
-// SqlStr2GoStr 数据库字段、表名转换为大驼峰的golang命名，并且会替换一些特殊的映射规则如：ID
-func SqlStr2GoStr(str string) string {
+// SQLStr2GoStr 数据库字段、表名转换为大驼峰的golang命名，并且会替换一些特殊的映射规则如：ID
+func SQLStr2GoStr(str string) string {
 	return mapper.Table2Obj(str)
 }
 

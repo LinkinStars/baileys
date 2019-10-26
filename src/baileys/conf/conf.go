@@ -19,11 +19,8 @@ func InitConfig(path string) (err error) {
 
 	// 配置映射到结构体
 	All = &AllConfig{}
-	if err := configVip.Unmarshal(All); err != nil {
-		return err
-	}
 
-	return nil
+	return configVip.Unmarshal(All)
 }
 
 // AllConfig 全部配置文件

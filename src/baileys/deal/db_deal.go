@@ -1,4 +1,4 @@
-package main
+package deal
 
 import (
 	"strings"
@@ -46,7 +46,7 @@ func ConvertRawData2Model(tables []*core.Table) (tableData []*entity.TableData) 
 		td := &entity.TableData{}
 		// 去掉表名后缀
 		newTableName := strings.TrimSuffix(table.Name, TableNameSuffix)
-		td.UpperCamelName = util.SqlStr2GoStr(newTableName)
+		td.UpperCamelName = util.SQLStr2GoStr(newTableName)
 		td.LowerCamelName = util.UpperToLowerCamel(td.UpperCamelName)
 		td.UnderlineName = newTableName
 		// 去掉表注释的后缀
@@ -62,7 +62,7 @@ func ConvertRawData2Model(tables []*core.Table) (tableData []*entity.TableData) 
 				fd.UpperCamelName = util.LowerToUpperCamel(column.Name)
 				fd.LowerCamelName = column.Name
 			} else {
-				fd.UpperCamelName = util.SqlStr2GoStr(column.Name)
+				fd.UpperCamelName = util.SQLStr2GoStr(column.Name)
 				fd.LowerCamelName = util.UpperToLowerCamel(fd.UpperCamelName)
 			}
 			fd.UnderlineName = column.Name

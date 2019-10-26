@@ -1,4 +1,4 @@
-package main
+package deal
 
 import (
 	"bytes"

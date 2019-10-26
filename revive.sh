@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+revive -exclude ./src/baileys/vendor/... -formatter friendly ./src/baileys/...

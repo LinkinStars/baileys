@@ -17,9 +17,4 @@
 *.iml
 *.ipr
 
-baileys-v1.0.0-darwin-amd64
-baileys-v1.0.0-windows-amd64
-baileys
-baileys.exe
-baileys-v1.0.0-darwin-amd64.tar.gz
-baileys-v1.0.0-darwin-windows.tar.gz
+baileys-* 

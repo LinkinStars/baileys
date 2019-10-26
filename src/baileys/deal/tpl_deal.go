@@ -1,10 +1,11 @@
-package main
+package deal
 
 import (
 	"io/ioutil"
 	"strings"
 	"text/template"
 
+	"baileys/cache"
 	"baileys/entity"
 	"baileys/util"
 )
@@ -19,30 +20,32 @@ func ReadDirGetTemplate(path string, tplFunc template.FuncMap) (tplList []*entit
 	}
 
 	for _, f := range files {
+		// 根据文件后缀过滤无关文件
 		if !strings.Contains(f.Name(), ".tpl") {
 			continue
 		}
-		tpl, err := CreateTemplate(path+f.Name(), tplFunc)
+		tpl, err := createTemplate(path+f.Name(), tplFunc)
 		if err != nil {
 			return tplList, err
 		}
 
+		// 获取没有带有后缀的文件名
 		filename := util.GetOnlyFilename(f.Name())
 
 		tplList = append(tplList, &entity.TplModel{
-			Tpl:            tpl,
-			Filename:       filename,
-			FilenameExt:    f.Name(),
-			OutputPath:     genRootPath + filename + "/",
-			FilenameSuffix: "_" + filename + ".go",
+			Tpl:             tpl,
+			Filename:        filename,
+			FilenameWithExt: f.Name(),
+			OutputPath:      cache.GenRootPath + filename + "/",
+			FilenameSuffix:  "_" + filename + ".go",
 		})
 	}
 
 	return tplList, err
 }
 
-// CreateTemplate 创建模板
-func CreateTemplate(tplPath string, tplFunc template.FuncMap) (tpl *template.Template, err error) {
+// createTemplate 创建模板
+func createTemplate(tplPath string, tplFunc template.FuncMap) (tpl *template.Template, err error) {
 	bs, err := ioutil.ReadFile(tplPath)
 	if err != nil {
 		return
