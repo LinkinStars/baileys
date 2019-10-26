@@ -10,11 +10,14 @@
 ![](./doc/show.gif)
 
 ## 使用过程
-1. 下载 release 版本，或者 clone 下来你自己编译也可以
-2. 解压修改 conf 文件夹下的配置文件conf.yml，主要是数据库配置和模板生成路径
+1. 下载 release 版本，或者 clone 下来你自己编译也可以   
+https://github.com/LinkinStars/baileys/releases
+2. 解压后，修改 conf 文件夹下的配置文件conf.yml，主要是数据库配置和模板生成路径
 3. 修改 tpl 下的模板为你自己想要的样子，你可以先往后走，回来再修改
 4. ./baileys 启动
 5. 选择你需要的模板和表格，点击生成即可
+
+PS: 修改配置文件，模板，数据库之后，只需要刷新页面即可重新加载，不需要重新启动
 
 下面是默认模板最终生成的样子  
 https://github.com/LinkinStars/golang-web-template
@@ -30,7 +33,7 @@ https://github.com/LinkinStars/golang-web-template
 ## 模板问题
 - 模板文件夹 tpl 中 every 文件夹下的模板表示所有选中数据库的表均会一一去生成，比如一个表生成一个实体类等。  
 - one 表示选中的表都会遍历一遍生成一个文件，比如遍历所有的表生成一个路由配置。
-- 模板中可以使用的引用如下
+- 模板中可以使用的引用字段如下
 
 ```go
 // TableData 表的数模型
