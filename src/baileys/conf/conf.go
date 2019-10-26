@@ -23,6 +23,16 @@ func InitConfig(path string) (err error) {
 	return configVip.Unmarshal(All)
 }
 
+// ORM 框架的名称枚举
+type ORM string
+
+var (
+	// XORMName xrom名称
+	XORMName ORM = "xorm"
+	// GORMName xrom名称
+	GORMName ORM = "gorm"
+)
+
 // AllConfig 全部配置文件
 type AllConfig struct {
 	Connection string `mapstructure:"connection"`
@@ -36,6 +46,8 @@ type AllConfig struct {
 	GenFileSuffix    bool `mapstructure:"gen_file_suffix"`
 	AutoImport       bool `mapstructure:"auto_import"`
 	IsLowerCamelName bool `mapstructure:"table_field_name_is_lower_camel_name"`
+
+	ORMName ORM `mapstructure:"orm_name"`
 
 	SpecialMapping []string `mapstructure:"mapping"`
 }

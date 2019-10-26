@@ -29,6 +29,9 @@ auto_import: true
 # 数据库字段名称是否为小驼峰命名，如orderName，不建议使用小驼峰，这个配置可能会用于一些特殊用户
 table_field_name_is_lower_camel_name: false
 
+# orm 框架配置 可选项："xorm" "gorm"
+orm_name: "xorm"
+
 # 一些特殊的数据库映射关系，比如id，我们希望直接映射为ID 而不是 Id 也不要出现i_d
 mapping:
   - "ID"

@@ -66,5 +66,8 @@ type FieldData struct {
 如果你有写好的目标想要共享也可以提issue。
 
 ## UPDATE
+- 1.0.0 支持生成XORM的标签，validate.v9的标签 [release]
+- 1.0.1 支持生成GORM的标签 [test]
+
 ## TODO
-- [ ] 更多框架支持
+- [ ] 当前生成的默认为xorm的标签完整并可用，gorm的标签可以生成但是还不完整，还需修改
