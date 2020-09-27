@@ -37,3 +37,8 @@ func LowerToUpperCamel(s string) string {
 func UnderlineStr2Strikethrough(str string) string {
 	return strings.ReplaceAll(str, "_", "-")
 }
+
+// 替换时间time.Time -> times.ISOTime
+func ReplaceTime2TimesISOTime(str string) string {
+	return strings.ReplaceAll(str, "time.Time", "times.ISOTime")
+}

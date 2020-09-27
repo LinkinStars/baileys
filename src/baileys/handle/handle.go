@@ -19,6 +19,7 @@ var (
 	tplFunc = template.FuncMap{
 		"UnderlineStr2Strikethrough": util.UnderlineStr2Strikethrough,
 		"ChangeValTagForUpdate":      util.ChangeValTagForUpdate,
+		"ReplaceTime2TimesISOTime":   util.ReplaceTime2TimesISOTime,
 	}
 )
 
@@ -32,6 +33,7 @@ func LoadingIndex(context *gin.Context) {
 
 	// 设置表名和表注释后缀忽略
 	deal.TableNameSuffix = conf.All.TableNameSuffix
+	deal.TableNamePrefix = conf.All.TableNamePrefix
 	deal.TableCommentSuffix = conf.All.TableCommentSuffix
 
 	// 将配置文件中的映射关系表保存

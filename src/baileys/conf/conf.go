@@ -38,6 +38,7 @@ type AllConfig struct {
 	Connection string `mapstructure:"connection"`
 
 	TableNameSuffix    string `mapstructure:"table_name_suffix"`
+	TableNamePrefix    string `mapstructure:"table_name_prefix"`
 	TableCommentSuffix string `mapstructure:"table_comment_suffix"`
 
 	EveryTplGenPath map[string]string `mapstructure:"every_tpl_gen_path"`

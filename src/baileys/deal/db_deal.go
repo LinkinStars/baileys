@@ -15,6 +15,8 @@ import (
 var (
 	// TableNameSuffix 表名后缀
 	TableNameSuffix = ""
+	// TableNamePrefix 表名前缀
+	TableNamePrefix = ""
 	// TableCommentSuffix 表注释后缀
 	TableCommentSuffix = ""
 )
@@ -61,6 +63,8 @@ func createTableData(tableName, tableComment string) *entity.TableData {
 	td := &entity.TableData{}
 	// 去掉表名后缀
 	newTableName := strings.TrimSuffix(tableName, TableNameSuffix)
+	// 去掉表名前缀
+	newTableName = strings.TrimPrefix(newTableName, TableNamePrefix)
 	// 去掉表注释的后缀
 	td.Comment = strings.TrimSuffix(tableComment, TableCommentSuffix)
 

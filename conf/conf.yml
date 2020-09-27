@@ -14,6 +14,9 @@ every_tpl_gen_path:
 one_tpl_gen_path:
   router: "./gen/router/"
 
+# 表名的前缀，有人喜欢在表名之前加入前缀
+table_name_prefix: "mm_"
+
 # 表名的后缀，有些人喜欢将表名加上后缀 _tab 生成的时候需要去除 则在下方填入
 table_name_suffix: "_tab"
 
