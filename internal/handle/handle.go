@@ -3,6 +3,7 @@ package handle
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"text/template"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,8 @@ var (
 		"UnderlineStr2Strikethrough": util.UnderlineStr2Strikethrough,
 		"ChangeValTagForUpdate":      util.ChangeValTagForUpdate,
 		"ReplaceTime2TimesISOTime":   util.ReplaceTime2TimesISOTime,
+		"ToUpper":                    strings.ToUpper,
+		"ToLower":                    strings.ToLower,
 	}
 )
 
