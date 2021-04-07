@@ -1,9 +1,9 @@
 package service
 
 // Add{{.UpperCamelName}} 新增{{.Comment}}
-func Add{{.UpperCamelName}}(add{{.UpperCamelName}}Req *val.Add{{.UpperCamelName}}Req) (err error) {
+func Add{{.UpperCamelName}}(req *val.Add{{.UpperCamelName}}Req) (err error) {
     {{.LowerCamelName}} := &model.{{.UpperCamelName}}{}
-    _ = copier.Copy({{.LowerCamelName}}, add{{.UpperCamelName}}Req)
+    _ = copier.Copy({{.LowerCamelName}}, req)
     return dao.Add{{.UpperCamelName}}({{.LowerCamelName}})
 }
 
@@ -13,28 +13,28 @@ func Remove{{.UpperCamelName}}(id int) (err error) {
 }
 
 // Update{{.UpperCamelName}} 修改{{.Comment}}
-func Update{{.UpperCamelName}}(update{{.UpperCamelName}}Req *val.Update{{.UpperCamelName}}Req) (err error) {
+func Update{{.UpperCamelName}}(req *val.Update{{.UpperCamelName}}Req) (err error) {
     {{.LowerCamelName}} := &model.{{.UpperCamelName}}{}
-    _ = copier.Copy({{.LowerCamelName}}, update{{.UpperCamelName}}Req)
+    _ = copier.Copy({{.LowerCamelName}}, req)
     return dao.Update{{.UpperCamelName}}({{.LowerCamelName}})
 }
 
 // Get{{.UpperCamelName}} 查询{{.Comment}} 单个
-func Get{{.UpperCamelName}}(id int) (get{{.UpperCamelName}}Resp *val.Get{{.UpperCamelName}}Resp, err error) {
+func Get{{.UpperCamelName}}(id int) (req *val.Get{{.UpperCamelName}}Resp, err error) {
 	{{.LowerCamelName}}, err := dao.Get{{.UpperCamelName}}(id)
     if err != nil || {{.LowerCamelName}} == nil {
         return
     }
 
-    get{{.UpperCamelName}}Resp = &val.Get{{.UpperCamelName}}Resp{}
-    _ = copier.Copy(get{{.UpperCamelName}}Resp, {{.LowerCamelName}})
-    return get{{.UpperCamelName}}Resp, nil
+    req = &val.Get{{.UpperCamelName}}Resp{}
+    _ = copier.Copy(req, {{.LowerCamelName}})
+    return req, nil
 }
 
 // Get{{.UpperCamelName}}s 查询{{.Comment}}列表 全部
-func Get{{.UpperCamelName}}s(get{{.UpperCamelName}}sReq *val.Get{{.UpperCamelName}}sReq) ({{.LowerCamelName}}sResp *[]val.Get{{.UpperCamelName}}Resp, err error) {
+func Get{{.UpperCamelName}}s(req *val.Get{{.UpperCamelName}}sReq) ({{.LowerCamelName}}sResp *[]val.Get{{.UpperCamelName}}Resp, err error) {
 	{{.LowerCamelName}} := &model.{{.UpperCamelName}}{}
-	_ = copier.Copy({{.LowerCamelName}}, get{{.UpperCamelName}}sReq)
+	_ = copier.Copy({{.LowerCamelName}}, req)
 
 	{{.LowerCamelName}}s, err := dao.Get{{.UpperCamelName}}s({{.LowerCamelName}})
 	if err != nil {
@@ -47,12 +47,12 @@ func Get{{.UpperCamelName}}s(get{{.UpperCamelName}}sReq *val.Get{{.UpperCamelNam
 }
 
 // Get{{.UpperCamelName}}sWithPage 查询{{.Comment}}列表 分页
-func Get{{.UpperCamelName}}sWithPage(get{{.UpperCamelName}}sWithPageReq *val.Get{{.UpperCamelName}}sWithPageReq) (pageModel *pager.PageModel, err error) {
+func Get{{.UpperCamelName}}sWithPage(req *val.Get{{.UpperCamelName}}sWithPageReq) (pageModel *pager.PageModel, err error) {
 	{{.LowerCamelName}} := &model.{{.UpperCamelName}}{}
-	_ = copier.Copy({{.LowerCamelName}}, get{{.UpperCamelName}}sWithPageReq)
+	_ = copier.Copy({{.LowerCamelName}}, req)
 
-	page := get{{.UpperCamelName}}sWithPageReq.Page
-	pageSize := get{{.UpperCamelName}}sWithPageReq.PageSize
+	page := req.Page
+	pageSize := req.PageSize
 	
 	{{.LowerCamelName}}s, total, err := dao.Get{{.UpperCamelName}}sPage(page, pageSize, {{.LowerCamelName}})
 	if err != nil {
