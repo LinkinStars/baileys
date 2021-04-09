@@ -17,11 +17,18 @@ type MyStructInfoCreatorForGORM struct {
 
 // CreateTypeString 生成字段的数据类型
 func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
+	colName := strings.ToLower(d.Column.Name)
+	if colName == "deleted" || colName == "deleted_at" {
+		return "gorm.DeletedAt"
+	}
 	st := d.Column.SQLType
 	t := core.SQLType2Type(st)
 	s := t.String()
 	if s == "[]uint8" {
 		return "[]byte"
+	}
+	if s == "int" {
+		return "int64"
 	}
 	d.typeStr = s
 	return s
@@ -33,12 +40,21 @@ func (d *MyStructInfoCreatorForGORM) CreateORMTag() string {
 	sqlTypeStr := colSQLType(col)
 
 	res := ""
+	colName := strings.ToLower(col.Name)
+	if colName == "created" || colName == "created_at" {
+		res += ";autoCreateTime"
+	}
+	if colName == "updated" || colName == "updated_at" {
+		res += ";autoUpdateTime"
+	}
+
 	if col.IsPrimaryKey {
 		res += ";primary_key"
 	}
 	if col.IsAutoIncrement {
 		res += ";AUTO_INCREMENT"
 	}
+
 	return fmt.Sprintf("`"+`gorm:"column:%s;type:%s%s"`+"`", col.Name, sqlTypeStr, res)
 }
 
