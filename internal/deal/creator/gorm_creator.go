@@ -17,6 +17,10 @@ type MyStructInfoCreatorForGORM struct {
 
 // CreateTypeString 生成字段的数据类型
 func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
+	colName := strings.ToLower(d.Column.Name)
+	if colName == "deleted" || colName == "deleted_at" {
+		return "gorm.DeletedAt"
+	}
 	st := d.Column.SQLType
 	t := core.SQLType2Type(st)
 	s := t.String()
@@ -24,10 +28,6 @@ func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
 		return "[]byte"
 	}
 	d.typeStr = s
-	colName := strings.ToLower(d.Column.Name)
-	if colName == "deleted" || colName == "deleted_at" {
-		return "gorm.DeletedAt"
-	}
 	return s
 }
 
