@@ -24,6 +24,10 @@ func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
 		return "[]byte"
 	}
 	d.typeStr = s
+	colName := strings.ToLower(d.Column.Name)
+	if colName == "deleted" || colName == "deleted_at" {
+		return "gorm.DeletedAt"
+	}
 	return s
 }
 
@@ -33,12 +37,21 @@ func (d *MyStructInfoCreatorForGORM) CreateORMTag() string {
 	sqlTypeStr := colSQLType(col)
 
 	res := ""
+	colName := strings.ToLower(col.Name)
+	if colName == "created" || colName == "created_at" {
+		res += ";autoCreateTime"
+	}
+	if colName == "updated" || colName == "updated_at" {
+		res += ";autoUpdateTime"
+	}
+
 	if col.IsPrimaryKey {
 		res += ";primary_key"
 	}
 	if col.IsAutoIncrement {
 		res += ";AUTO_INCREMENT"
 	}
+
 	return fmt.Sprintf("`"+`gorm:"column:%s;type:%s%s"`+"`", col.Name, sqlTypeStr, res)
 }
 
