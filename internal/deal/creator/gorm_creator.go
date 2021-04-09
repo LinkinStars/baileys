@@ -27,6 +27,9 @@ func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
 	if s == "[]uint8" {
 		return "[]byte"
 	}
+	if s == "int" {
+		return "int64"
+	}
 	d.typeStr = s
 	return s
 }
