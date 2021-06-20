@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -26,8 +27,16 @@ func main() {
 	router.LoadHTMLGlob("templates/*.html")
 	router.Static("/static", "./static")
 
-	router.GET("/", handle.LoadingIndex)
-	router.POST("/gen", handle.GenCode)
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "index.html", "")
+	})
+	router.GET("/converter/sql/code", handle.ConverterSql2Code)
+	router.GET("/converter/go/pb", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "struct_2_pb.html", "")
+	})
+
+	router.POST("/gen/sql/code", handle.GenCode)
+	router.POST("/gen/go/pb", handle.ConvertGoStruct2PbMessage)
 
 	err := util.OpenBrowser("http://127.0.0.1:" + cache.WebPort + "/")
 	if err != nil {

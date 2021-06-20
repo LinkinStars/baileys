@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>baileys</title>
+    
+    <script crossorigin="anonymous" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- 页头 -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="page-header">
+                <h1>Baileys<small> 从数据库到代码的自动生成工具 —— 从数据库生成代码</small></h1>
+            </div>
+        </div>
+        <!-- 功能按钮 -->
+        <div class="col-md-1">
+            <div class="page-header">
+                <button type="button" class="btn btn-success" onclick="gen()"> 点击生成 </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 模板列表 -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th><button type="button" class="btn-xs btn-link" onclick="checkAllTpl()">全选/全不选</button></th>
+                                <th>模板名称</th>
+                                <th>生成路径</th>
+                                <th>输出文件名称参考</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range $i,$e := .everyTplList}}
+                                <tr class="info" onclick="chooseTr(this)">
+                                    <td><input id="{{ $e.Tpl.Name }}" name="tplCheckbox" type="checkbox"></td>
+                                    <td>{{ $e.Tpl.Name }}</td>
+                                    <td>{{ $e.OutputPath }}</td>
+                                    <td>xxx{{ $e.FilenameSuffix }}</td>
+                                </tr>
+                            {{end}}
+                            {{range $i,$e := .oneTplList}}
+                                <tr class="success" onclick="chooseTr(this)">
+                                    <td><input id="{{ $e.Tpl.Name }}" name="tplCheckbox" type="checkbox"></td>
+                                    <td>{{ $e.Tpl.Name }}</td>
+                                    <td>{{ $e.OutputPath }}</td>
+                                    <td>{{ $e.FilenameSuffix }}</td>
+                                </tr>
+                            {{end}}
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th><button type="button" class="btn-xs btn-link" onclick="checkAllTab()">全选/全不选</button></th>
+                            <th>大驼峰命名</th>
+                            <th>小驼峰命名</th>
+                            <th>下划线命名</th>
+                            <th>注释</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {{range $i,$e := .tableData}}
+                                <tr onclick="chooseTr(this)">
+                                    <td><input id="{{ $e.UpperCamelName }}" name="tabCheckbox" type="checkbox"></td>
+                                    <td>{{ $e.UpperCamelName }}</td>
+                                    <td>{{ $e.LowerCamelName }}</td>
+                                    <td>{{ $e.UnderlineName }}</td>
+                                    <td>{{ $e.Comment }}</td>
+                                </tr>
+                            {{end}}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loadingModal" style="pointer-events: none">
+    <div style="width: 500px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-300px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0; width: 100%;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h1 style="color:black"> <strong>正在生成中...请勿刷新页面</strong> </h1>
+    </div>
+</div>
+
+<script>
+    // 设置缓存，30分钟就够了
+    function setCookie(name,value) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() + 30 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    }
+    function getCookie(name) {
+        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+        if(arr != null) {
+            return unescape(arr[2]);
+        }
+    }
+</script>
+
+<script>
+    // 从cookie从获取之前点击过的模板和表，再次选中他们，保证刷新不会丢失
+    var tplCheckboxListCookie = getCookie("tplCheckboxListCookie");
+    var tabCheckboxListCookie = getCookie("tabCheckboxListCookie");
+    if (tplCheckboxListCookie != null) {
+        checkTheInputs(tplCheckboxListCookie.split(","))
+    }
+    if (tabCheckboxListCookie != null) {
+        checkTheInputs(tabCheckboxListCookie.split(","))
+    }
+    function checkTheInputs(alreadyCheckedInput) {
+        for (i = 0; i < alreadyCheckedInput.length; i++) {
+            temp = alreadyCheckedInput[i];
+            temp = temp.replace(/"/g,'');
+            tplInput = document.getElementById(temp);
+            if (tplInput != null) {
+                tplInput.checked = true;
+            }
+        }
+    }
+    
+    // 点击全选或者全不选
+    var isTplCheck = true;
+    function checkAllTpl() {
+        var tplCheckboxList = document.getElementsByName("tplCheckbox");
+        for (i = 0; i < tplCheckboxList.length; i++) {
+            tplCheckboxList[i].checked = isTplCheck
+        }
+        isTplCheck = !isTplCheck
+    }
+    var isTabCheck = true;
+    function checkAllTab() {
+        var tabCheckboxList = document.getElementsByName("tabCheckbox");
+        for (i = 0; i < tabCheckboxList.length; i++) {
+            tabCheckboxList[i].checked = isTabCheck
+        }
+        isTabCheck = !isTabCheck
+    }
+    
+    // 点击tr可以直接选中或取消最前面的checkbox
+    function chooseTr(tr){
+        var inputs = tr.getElementsByTagName("input");
+        for (i = 0; i < inputs.length; i++) {
+            inputs[i].checked = !inputs[i].checked
+        }
+    }
+
+    // 保证checkbox的点击事件不会和tr点击事件冲突
+    $(':checkbox').click( function (e) {
+        // 注销掉checkbox的点击事件
+        e.stopPropagation();
+    });
+</script>
+
+<script>
+    // 点击生成
+    function gen() {
+        // 显示loading弹窗
+        $("#loadingModal").modal('show');
+        
+        // 获取选中的模板
+        var tplCheckboxList = document.getElementsByName("tplCheckbox");
+        var checkTplArr = [];
+        var index = 0;
+        for (i = 0; i < tplCheckboxList.length; i++) {
+            if (tplCheckboxList[i].checked) {
+                checkTplArr[index++] = "\"" + tplCheckboxList[i].id + "\"";
+            }
+        }
+        // 缓存选中的模板
+        setCookie("tplCheckboxListCookie", checkTplArr.toString());
+        
+        // 获取选中的表
+        var tabCheckboxList = document.getElementsByName("tabCheckbox");
+        var checkTabArr = [];
+        index = 0;
+        for (i = 0; i < tabCheckboxList.length; i++) {
+            if (tabCheckboxList[i].checked) {
+                checkTabArr[index++] = "\"" + tabCheckboxList[i].id + "\"";
+            }
+        }
+        // 缓存选中的表
+        setCookie("tabCheckboxListCookie", checkTabArr.toString());
+
+        $.ajax({
+            url: '/gen/sql/code',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: "{\"gen_tpl_name_list\":[" + checkTplArr.toString() + "], \"gen_table_name_list\":[" + checkTabArr.toString() + "]}",
+            success: function(result){
+                $("#loadingModal").modal('hide');
+                alert(result.message)
+            },error: function (e) {
+                $("#loadingModal").modal('hide');
+                alert(e.statusText)
+            }
+        })
+    }
+</script>
+</body>
+</html>

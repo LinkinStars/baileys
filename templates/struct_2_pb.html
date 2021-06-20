@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>baileys</title>
+    
+    <script crossorigin="anonymous" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- 页头 -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="page-header">
+                <h1>Baileys<small> 代码自动生成工具 —— golang struct 生成 Protocol Buffers </small></h1>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 模板列表 -->
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <textarea type="text" id="go_struct_input" rows="40" style="width: 100%;"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="margin: auto auto;">
+            <button type="button" class="btn btn-success" onclick="gen()"> 点击生成 </button>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <textarea type="text" id="pb_code" rows="40" style="width: 100%;"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // 点击生成
+    function gen() {
+        var go_struct_input = document.getElementById("go_struct_input");
+        var pb_code = document.getElementById("pb_code");
+        //alert(go_struct_input.value)
+        $.ajax({
+            url: '/gen/go/pb',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({                  
+                go_struct: go_struct_input.value
+            }),
+            success: function(result){
+                pb_code.value = result.data
+            },error: function (e) {
+                alert(e.statusText)
+            }
+        })
+    }
+</script>
+</body>
+</html>

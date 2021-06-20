@@ -6,6 +6,9 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/LinkinStars/baileys/internal/converter"
+	"github.com/LinkinStars/baileys/internal/generator"
+	"github.com/LinkinStars/baileys/internal/parser"
 	"github.com/gin-gonic/gin"
 
 	"github.com/LinkinStars/baileys/internal/cache"
@@ -26,8 +29,8 @@ var (
 	}
 )
 
-// LoadingIndex 进入主页加载配置文件、模板、数据库数据
-func LoadingIndex(context *gin.Context) {
+// ConverterSql2Code 进入主页加载配置文件、模板、数据库数据
+func ConverterSql2Code(context *gin.Context) {
 	err := conf.InitConfig(cache.ConfPath)
 	if err != nil {
 		context.JSON(http.StatusOK, "读取配置文件出现异常："+err.Error())
@@ -87,13 +90,13 @@ func LoadingIndex(context *gin.Context) {
 	data["tableData"] = cache.TableData
 	data["everyTplList"] = cache.EveryTplList
 	data["oneTplList"] = cache.OneTplList
-	context.HTML(http.StatusOK, "index.html", data)
+	context.HTML(http.StatusOK, "sql_2_code.html", data)
 }
 
 // GenCode 代码生成
-func GenCode(context *gin.Context) {
+func GenCode(ctx *gin.Context) {
 	genReq := &entity.GenReq{}
-	if err := context.Bind(genReq); err != nil {
+	if err := ctx.Bind(genReq); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -109,8 +112,31 @@ func GenCode(context *gin.Context) {
 
 	// 生成
 	if err := gen(chooseTableMap, chooseTplMap); err != nil {
-		util.SendFailResp(context, "生成失败："+err.Error())
+		util.SendFailResp(ctx, "生成失败："+err.Error())
 	} else {
-		util.SendSuccessResp(context, "生成成功~!")
+		util.SendSuccessResp(ctx, "生成成功~!")
+	}
+}
+
+// ConvertGoStruct2PbMessage 将 golang 结构体转换为 Protocol Buffers
+func ConvertGoStruct2PbMessage(ctx *gin.Context) {
+	req := &entity.ConvertGoStruct2PbMessageReq{}
+	if err := ctx.Bind(req); err != nil {
+		ctx.Error(err)
+		return
+	}
+
+	structList, err := parser.StructParser(req.GoStruct)
+	if err != nil {
+		util.SendFailResp(ctx, "生成失败："+err.Error())
+		return
+	}
+
+	pbList := converter.GoStruct2PB(structList)
+	message, err := generator.GenPBMessage(pbList)
+	if err != nil {
+		util.SendFailResp(ctx, "生成失败："+err.Error())
+	} else {
+		util.SendResp(ctx, 200, 200, "生成成功", message)
 	}
 }

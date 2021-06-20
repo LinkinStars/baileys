@@ -3,221 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>baileys</title>
-    
-    <script crossorigin="anonymous" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 <body>
 <div class="container-fluid">
-    <!-- 页头 -->
-    <div class="row">
-        <div class="col-md-10">
-            <div class="page-header">
-                <h1>Baileys<small> 从数据库到代码的自动生成工具</small></h1>
-            </div>
-        </div>
-        <!-- 功能按钮 -->
-        <div class="col-md-1">
-            <div class="page-header">
-                <button type="button" class="btn btn-success" onclick="gen()"> 点击生成 </button>
-            </div>
-        </div>
-    </div>
+    <div class="container py-3">
+        <header>
+            <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img"><title>Bootstrap</title><path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path></svg>
+                    <span class="fs-4">Baileys 代码自动生成工具</span>
+                </a>
 
+<!--                <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">-->
+<!--                    <a class="me-3 py-2 text-dark text-decoration-none" href="#">Features</a>-->
+<!--                    <a class="me-3 py-2 text-dark text-decoration-none" href="#">Enterprise</a>-->
+<!--                    <a class="me-3 py-2 text-dark text-decoration-none" href="#">Support</a>-->
+<!--                    <a class="py-2 text-dark text-decoration-none" href="#">Pricing</a>-->
+<!--                </nav>-->
+            </div>
 
-    <!-- 模板列表 -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th><button type="button" class="btn-xs btn-link" onclick="checkAllTpl()">全选/全不选</button></th>
-                                <th>模板名称</th>
-                                <th>生成路径</th>
-                                <th>输出文件名称参考</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{range $i,$e := .everyTplList}}
-                                <tr class="info" onclick="chooseTr(this)">
-                                    <td><input id="{{ $e.Tpl.Name }}" name="tplCheckbox" type="checkbox"></td>
-                                    <td>{{ $e.Tpl.Name }}</td>
-                                    <td>{{ $e.OutputPath }}</td>
-                                    <td>xxx{{ $e.FilenameSuffix }}</td>
-                                </tr>
-                            {{end}}
-                            {{range $i,$e := .oneTplList}}
-                                <tr class="success" onclick="chooseTr(this)">
-                                    <td><input id="{{ $e.Tpl.Name }}" name="tplCheckbox" type="checkbox"></td>
-                                    <td>{{ $e.Tpl.Name }}</td>
-                                    <td>{{ $e.OutputPath }}</td>
-                                    <td>{{ $e.FilenameSuffix }}</td>
-                                </tr>
-                            {{end}}
-                        </tbody>
-                        
-                    </table>
+<!--            <div class="pricing-header p-3 pb-md-4 mx-auto text-center">-->
+<!--                <h1 class="display-4 fw-normal">Pricing</h1>-->
+<!--                <p class="fs-5 text-muted">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>-->
+<!--            </div>-->
+        </header>
+
+        <main>
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                        <div class="card-header py-3 text-white bg-primary border-primary">
+                            <h4 class="my-0 fw-normal">从数据库生成代码</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>读取数据库配置，根据模板生成对应代码</li>
+                                <li>生成 model/service/controller</li>
+                                <li>生成 .....</li>
+                            </ul>
+                            <a href="./converter/sql/code"><button type="button" class="w-100 btn btn-lg btn-primary">启动</button></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm border-info">
+                        <div class="card-header py-3 text-white bg-info border-info">
+                            <h4 class="my-0 fw-normal">将 go struct 转换为 Protocol Buffers</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>输入你需要转换的 go struct</li>
+                                <li>点击转换</li>
+                                <li>Protocol Buffers</li>
+                            </ul>
+                            <a href="./converter/go/pb"><button type="button" class="w-100 btn btn-lg btn-info">启动</button></a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th><button type="button" class="btn-xs btn-link" onclick="checkAllTab()">全选/全不选</button></th>
-                            <th>大驼峰命名</th>
-                            <th>小驼峰命名</th>
-                            <th>下划线命名</th>
-                            <th>注释</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            {{range $i,$e := .tableData}}
-                                <tr onclick="chooseTr(this)">
-                                    <td><input id="{{ $e.UpperCamelName }}" name="tabCheckbox" type="checkbox"></td>
-                                    <td>{{ $e.UpperCamelName }}</td>
-                                    <td>{{ $e.LowerCamelName }}</td>
-                                    <td>{{ $e.UnderlineName }}</td>
-                                    <td>{{ $e.Comment }}</td>
-                                </tr>
-                            {{end}}
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-        </div>
+            
+        </main>
     </div>
 </div>
 
-<div class="modal fade" id="loadingModal" style="pointer-events: none">
-    <div style="width: 500px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-300px;margin-top:-10px">
-        <div class="progress progress-striped active" style="margin-bottom: 0; width: 100%;">
-            <div class="progress-bar" style="width: 100%;"></div>
-        </div>
-        <h1 style="color:black"> <strong>正在生成中...请勿刷新页面</strong> </h1>
-    </div>
-</div>
-
-<script>
-    // 设置缓存，30分钟就够了
-    function setCookie(name,value) {
-        var exp = new Date();
-        exp.setTime(exp.getTime() + 30 * 60 * 1000);
-        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
-    }
-    function getCookie(name) {
-        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
-        if(arr != null) {
-            return unescape(arr[2]);
-        }
-    }
-</script>
-
-<script>
-    // 从cookie从获取之前点击过的模板和表，再次选中他们，保证刷新不会丢失
-    var tplCheckboxListCookie = getCookie("tplCheckboxListCookie");
-    var tabCheckboxListCookie = getCookie("tabCheckboxListCookie");
-    if (tplCheckboxListCookie != null) {
-        checkTheInputs(tplCheckboxListCookie.split(","))
-    }
-    if (tabCheckboxListCookie != null) {
-        checkTheInputs(tabCheckboxListCookie.split(","))
-    }
-    function checkTheInputs(alreadyCheckedInput) {
-        for (i = 0; i < alreadyCheckedInput.length; i++) {
-            temp = alreadyCheckedInput[i];
-            temp = temp.replace(/"/g,'');
-            tplInput = document.getElementById(temp);
-            if (tplInput != null) {
-                tplInput.checked = true;
-            }
-        }
-    }
-    
-    // 点击全选或者全不选
-    var isTplCheck = true;
-    function checkAllTpl() {
-        var tplCheckboxList = document.getElementsByName("tplCheckbox");
-        for (i = 0; i < tplCheckboxList.length; i++) {
-            tplCheckboxList[i].checked = isTplCheck
-        }
-        isTplCheck = !isTplCheck
-    }
-    var isTabCheck = true;
-    function checkAllTab() {
-        var tabCheckboxList = document.getElementsByName("tabCheckbox");
-        for (i = 0; i < tabCheckboxList.length; i++) {
-            tabCheckboxList[i].checked = isTabCheck
-        }
-        isTabCheck = !isTabCheck
-    }
-    
-    // 点击tr可以直接选中或取消最前面的checkbox
-    function chooseTr(tr){
-        var inputs = tr.getElementsByTagName("input");
-        for (i = 0; i < inputs.length; i++) {
-            inputs[i].checked = !inputs[i].checked
-        }
-    }
-
-    // 保证checkbox的点击事件不会和tr点击事件冲突
-    $(':checkbox').click( function (e) {
-        // 注销掉checkbox的点击事件
-        e.stopPropagation();
-    });
-</script>
-
-<script>
-    // 点击生成
-    function gen() {
-        // 显示loading弹窗
-        $("#loadingModal").modal('show');
-        
-        // 获取选中的模板
-        var tplCheckboxList = document.getElementsByName("tplCheckbox");
-        var checkTplArr = [];
-        var index = 0;
-        for (i = 0; i < tplCheckboxList.length; i++) {
-            if (tplCheckboxList[i].checked) {
-                checkTplArr[index++] = "\"" + tplCheckboxList[i].id + "\"";
-            }
-        }
-        // 缓存选中的模板
-        setCookie("tplCheckboxListCookie", checkTplArr.toString());
-        
-        // 获取选中的表
-        var tabCheckboxList = document.getElementsByName("tabCheckbox");
-        var checkTabArr = [];
-        index = 0;
-        for (i = 0; i < tabCheckboxList.length; i++) {
-            if (tabCheckboxList[i].checked) {
-                checkTabArr[index++] = "\"" + tabCheckboxList[i].id + "\"";
-            }
-        }
-        // 缓存选中的表
-        setCookie("tabCheckboxListCookie", checkTabArr.toString());
-
-        $.ajax({
-            url: '/gen',
-            type: 'post',
-            dataType: 'json',
-            contentType: 'application/json',
-            data: "{\"gen_tpl_name_list\":[" + checkTplArr.toString() + "], \"gen_table_name_list\":[" + checkTabArr.toString() + "]}",
-            success: function(result){
-                $("#loadingModal").modal('hide');
-                alert(result.message)
-            },error: function (e) {
-                $("#loadingModal").modal('hide');
-                alert(e.statusText)
-            }
-        })
-    }
-</script>
 </body>
 </html>
