@@ -88,10 +88,16 @@ type User struct {
     var go_struct_input_editor = ace.edit("go_struct_input");
     go_struct_input_editor.setTheme("ace/theme/monokai");
     go_struct_input_editor.getSession().setMode("ace/mode/golang");
+    go_struct_input_editor.setOptions({
+      fontSize: "10pt"
+    });
 
     var pb_code_editor = ace.edit("pb_code");
     pb_code_editor.setTheme("ace/theme/monokai");
     pb_code_editor.getSession().setMode("ace/mode/protobuf");
+    pb_code_editor.setOptions({
+      fontSize: "10pt"
+    });
     
     // 点击生成
     function gen() {
