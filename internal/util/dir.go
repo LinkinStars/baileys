@@ -20,10 +20,7 @@ func CreateDirIfNotExist(dir string) error {
 // CheckPathIfNotExist return true if file exist
 func CheckPathIfNotExist(path string) bool {
 	_, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return true
+	return !os.IsNotExist(err)
 }
 
 // GetOnlyFilename return a filename without extension

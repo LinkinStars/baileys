@@ -86,7 +86,7 @@ func ConverterSql2Code(context *gin.Context) {
 	}
 
 	// 封装返回数据
-	data := make(map[string]interface{}, 0)
+	data := make(map[string]interface{}, 4)
 	data["tableData"] = cache.TableData
 	data["everyTplList"] = cache.EveryTplList
 	data["oneTplList"] = cache.OneTplList
@@ -102,7 +102,7 @@ func GenCode(ctx *gin.Context) {
 	}
 
 	// 将用户选中的模板和表格保存起来
-	chooseTableMap, chooseTplMap := make(map[string]bool, 0), make(map[string]bool, 0)
+	chooseTableMap, chooseTplMap := make(map[string]bool, 4), make(map[string]bool, 4)
 	for _, tableName := range genReq.GenTableNameList {
 		chooseTableMap[tableName] = true
 	}
@@ -122,7 +122,7 @@ func GenCode(ctx *gin.Context) {
 func ConvertGoStruct2PbMessage(ctx *gin.Context) {
 	req := &entity.ConvertGoStruct2PbMessageReq{}
 	if err := ctx.Bind(req); err != nil {
-		ctx.Error(err)
+		_ = ctx.Error(err)
 		return
 	}
 
