@@ -24,6 +24,11 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}"
+release:
+  github:
+    owner: LinkinStars
+    name: https://github.com/LinkinStars/baileys
+  name_template: "{{ .Tag }}"
 changelog:
   sort: asc
   filters:
