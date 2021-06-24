@@ -17,5 +17,5 @@
 *.iml
 *.ipr
 
-baileys-* 
 gen
+dist

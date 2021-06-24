@@ -1,16 +1,18 @@
 package main
 
 import (
+	"embed"
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 
+	"github.com/LinkinStars/baileys/internal/util"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/LinkinStars/baileys/internal/cache"
 	"github.com/LinkinStars/baileys/internal/handle"
-	"github.com/LinkinStars/baileys/internal/util"
 )
 
 func init() {
@@ -18,13 +20,21 @@ func init() {
 	flag.StringVar(&cache.WebPort, "p", "5272", "default web port")
 }
 
+//go:embed templates
+var tmpl embed.FS
+
 func main() {
 	flag.Parse()
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
-	router.LoadHTMLGlob("templates/*.html")
+	t, err := template.ParseFS(tmpl, "templates/*.html")
+	if err != nil {
+		panic(err.Error())
+	}
+	router.SetHTMLTemplate(t)
+	//router.LoadHTMLGlob("templates/*.html")
 	router.Static("/static", "./static")
 
 	router.GET("/", func(ctx *gin.Context) {
@@ -38,8 +48,7 @@ func main() {
 	router.POST("/gen/sql/code", handle.GenCode)
 	router.POST("/gen/go/pb", handle.ConvertGoStruct2PbMessage)
 
-	err := util.OpenBrowser("http://127.0.0.1:" + cache.WebPort + "/")
-	if err != nil {
+	if err := util.OpenBrowser("http://127.0.0.1:" + cache.WebPort + "/"); err != nil {
 		log.Print("open browser error : ", err)
 	}
 

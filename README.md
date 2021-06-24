@@ -1,5 +1,5 @@
 # Baileys —— 代码自动生成工具
-<img align="right" width="159px" src="https://raw.githubusercontent.com/LinkinStars/baileys/master/doc/logo.png">
+<img align="right" width="159px" src="https://raw.githubusercontent.com/LinkinStars/baileys/master/docs/logo.png">
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/LinkinStars/baileys)](https://goreportcard.com/report/github.com/LinkinStars/baileys)
 
@@ -10,7 +10,7 @@
 ### 读取数据库结构生成代码
 > 修改配置文件，修改模板，点击生成，从数据库到代码的一键生成完成！从此 golang 的 web 开发也可以非常简单~   正所谓，只有更快的拧螺丝，才有时间造火箭。
 
-![](./doc/show.gif)
+![](./docs/show.gif)
 
 #### 使用过程
 1. 下载 release 版本，或者 clone 下来你自己编译也可以   
