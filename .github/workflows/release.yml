@@ -1,13 +1,9 @@
-name: goreleaser
+name: release
 
 on:
   create:
     tags:
       - v*
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   goreleaser:

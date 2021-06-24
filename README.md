@@ -1,4 +1,4 @@
-# Baileys —— 代码自动生成工具
+# Baileys 代码自动生成工具
 <img align="right" width="159px" src="https://raw.githubusercontent.com/LinkinStars/baileys/master/docs/logo.png">
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/LinkinStars/baileys)](https://goreportcard.com/report/github.com/LinkinStars/baileys)
@@ -63,13 +63,17 @@ type FieldData struct {
 数据库中字段最好以下划线分割进行命名，这样能最正常的保证输出结果，如果以小驼峰命名可能出现奇怪的命名
 
 #### 自定义
-主要数据库中拿到的参数这边都已经提供，如果需要可以直接从模板中引用。  
+主要数据库中拿到的参数这边都已经提供，如果需要可以直接从模板中引用。    
 如果参数不够用，比如你需要自定义标签等，那就只能fork过去自己改了。  
 如果你有写好的目标想要共享也可以提issue。
 
 #### UPDATE
 - 1.0.0 支持生成XORM的标签，validate.v9的标签 [release]
 - 1.0.1 支持生成GORM的标签 [test]
+
+### 将 golang struct 转换为 Protocol Buffers
+![](./docs/struct2pb.png)
+使用很简单，只需要将 struct 复制到左边，然后点击转换即可
 
 ## TODO
 - [ ] go struct 转 json
