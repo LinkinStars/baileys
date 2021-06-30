@@ -1,4 +1,4 @@
-package parser
+package parsing
 
 import (
 	"reflect"
@@ -7,6 +7,7 @@ import (
 
 const src = `
 type T struct {
+	// 第一个参数
 	F1 bool
 	F2 int
 	F3 int8

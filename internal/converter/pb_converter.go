@@ -4,35 +4,39 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/LinkinStars/baileys/internal/parser"
+	"github.com/LinkinStars/baileys/internal/parsing"
 )
 
 // PBFlat pb struct
 type PBFlat struct {
 	Name        string
+	Comment     string
 	PBFieldList []*PBField
 }
 
 // PBField pb field struct
 type PBField struct {
-	Type  string
-	Name  string
-	Index int
+	Type    string
+	Name    string
+	Comment string
+	Index   int
 }
 
 // GoStruct2PB convert golang struct to Protocol Buffers
-func GoStruct2PB(structList []*parser.StructFlat) (pbList []*PBFlat) {
+func GoStruct2PB(structList []*parsing.StructFlat) (pbList []*PBFlat) {
 	pbList = make([]*PBFlat, 0)
 	for _, s := range structList {
 		pbFlat := &PBFlat{
 			Name:        s.Name,
+			Comment:     s.Comment,
 			PBFieldList: make([]*PBField, 0),
 		}
 		for idx, field := range s.Fields {
 			pbField := &PBField{
-				Name:  field.Name,
-				Type:  GoType2PB(field.Type),
-				Index: idx + 1,
+				Name:    field.Name,
+				Type:    GoType2PB(field.Type),
+				Comment: field.Comment,
+				Index:   idx + 1,
 			}
 			pbFlat.PBFieldList = append(pbFlat.PBFieldList, pbField)
 		}

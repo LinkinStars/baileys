@@ -8,7 +8,7 @@ import (
 
 	"github.com/LinkinStars/baileys/internal/converter"
 	"github.com/LinkinStars/baileys/internal/generator"
-	"github.com/LinkinStars/baileys/internal/parser"
+	"github.com/LinkinStars/baileys/internal/parsing"
 	"github.com/gin-gonic/gin"
 
 	"github.com/LinkinStars/baileys/internal/cache"
@@ -126,7 +126,7 @@ func ConvertGoStruct2PbMessage(ctx *gin.Context) {
 		return
 	}
 
-	structList, err := parser.StructParser(req.GoStruct)
+	structList, err := parsing.StructParser(req.GoStruct)
 	if err != nil {
 		util.SendFailResp(ctx, "生成失败："+err.Error())
 		return

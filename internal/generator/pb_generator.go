@@ -10,9 +10,16 @@ import (
 )
 
 const (
-	pbTpl = `message {{.Name}} {
-{{range .PBFieldList}}  {{ .Type}} {{.Name}} = {{ .Index }};
-{{end}}}
+	pbTpl = `{{if and (ne .Comment "")}}// {{ .Comment}}
+{{end -}}message {{.Name}} { {{range .PBFieldList}}
+    {{if and (ne .Comment "") -}}
+    // {{ .Comment}}
+    {{ .Type}} {{.Name}} = {{ .Index }};
+    {{- else -}}
+    {{ .Type}} {{.Name}} = {{ .Index }};
+    {{- end}}
+{{- end}}
+}
 `
 )
 
