@@ -273,7 +273,7 @@
     
     $('#clipboard').on('click', function() {
       var copyTextarea = document.querySelector('#clipboard-content');
-      copyTextarea.value = json_code_editor.getValue();
+      copyTextarea.value = golang_code_editor.getValue();
       copyTextarea.select();
       document.execCommand('copy');
       // Reset textarea
