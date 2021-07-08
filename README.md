@@ -4,8 +4,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/LinkinStars/baileys)](https://goreportcard.com/report/github.com/LinkinStars/baileys)
 
 ## Feature
-- 读取数据库结构生成代码
-- 将 golang struct 转换为 Protocol Buffers [在线使用](https://baileys.linkinstars.com/converter/go/pb)
+- 读取数据库结构生成代码 (无法在线使用，因需要连接本地数据库)
+- 将 golang struct 转换为 Protocol Buffers 
+- 将 json 转换为 golang struct
+
+[在线使用](https://baileys.linkinstars.com/)
   
 ### 读取数据库结构生成代码
 > 修改配置文件，修改模板，点击生成，从数据库到代码的一键生成完成！从此 golang 的 web 开发也可以非常简单~   正所谓，只有更快的拧螺丝，才有时间造火箭。
