@@ -86,7 +86,9 @@ type User struct {
         </div>
         <div class="col-md-2" style="top: 200px; left: 75px;">
             <button type="button" class="btn btn-success" onclick="gen()"> 点击转换-> </button><br><br><br><br>
-            <button type="button" class="btn btn-info" id="clipboard"> 点击复制 </button><br><br><br><br>
+            <button type="button" class="btn btn-info" id="clipboard" data-container="body" data-toggle="popover" data-placement="bottom" data-content="复制成功">
+                点击复制->
+            </button>
         </div>
         <div class="col-md-5">
             <div class="panel panel-default">
@@ -149,7 +151,11 @@ type User struct {
       document.execCommand('copy');
       // Reset textarea
       copyTextarea.value = "";
-  });
+    });
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
 </script>
 </body>
 </html>
