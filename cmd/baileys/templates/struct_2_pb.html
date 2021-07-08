@@ -86,12 +86,14 @@ type User struct {
         </div>
         <div class="col-md-2" style="top: 200px; left: 75px;">
             <button type="button" class="btn btn-success" onclick="gen()"> 点击转换-> </button><br><br><br><br>
+            <button type="button" class="btn btn-info" id="clipboard"> 点击复制 </button><br><br><br><br>
         </div>
         <div class="col-md-5">
             <div class="panel panel-default">
                 <div id="pb_code" class="editor"></div>
             </div>
         </div>
+        <textarea id="clipboard-content" style="position: absolute;top: 1000px;resize: none;background:none;border-style:none;"></textarea>
     </div>
 </div>
 
@@ -139,6 +141,15 @@ type User struct {
             }
         })
     }
+    
+    $('#clipboard').on('click', function() {
+      var copyTextarea = document.querySelector('#clipboard-content');
+      copyTextarea.value = pb_code_editor.getValue();
+      copyTextarea.select();
+      document.execCommand('copy');
+      // Reset textarea
+      copyTextarea.value = "";
+  });
 </script>
 </body>
 </html>
