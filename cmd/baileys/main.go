@@ -23,6 +23,9 @@ func init() {
 //go:embed templates
 var tmpl embed.FS
 
+//go:embed static
+var staticFS embed.FS
+
 func main() {
 	flag.Parse()
 
@@ -35,15 +38,14 @@ func main() {
 	}
 	router.SetHTMLTemplate(t)
 	//router.LoadHTMLGlob("templates/*.html")
-	router.Static("/static", "./static")
+	router.StaticFS("/static/", http.FS(staticFS))
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", "")
 	})
 	router.GET("/converter/sql/code", handle.ConverterSql2Code)
-	router.GET("/converter/go/pb", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "struct_2_pb.html", "")
-	})
+	router.GET("/converter/go/pb", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "struct_2_pb.html", "") })
+	router.GET("/converter/json/go", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "json_2_struct.html", "") })
 
 	router.POST("/gen/sql/code", handle.GenCode)
 	router.POST("/gen/go/pb", handle.ConvertGoStruct2PbMessage)

@@ -77,5 +77,5 @@ type FieldData struct {
 
 ## TODO
 - [ ] go struct 转 json
-- [ ] json 转 go struct
+- [x] json 转 go struct
 - [ ] 首页页面展示优化
