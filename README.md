@@ -80,5 +80,8 @@ type FieldData struct {
 
 ## TODO
 - [ ] go struct 转 json
-- [x] json 转 go struct
+- [x] json 转 go struct (使用 https://github.com/mholt/json-to-go 实现)
 - [ ] 首页页面展示优化
+- [ ] 启动和关闭方式优化
+- [ ] pb 转 golang struct
+- [ ] 自动生成 golang struct 和 pb 对象的转换function
