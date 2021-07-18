@@ -10,3 +10,8 @@ type GenReq struct {
 type ConvertGoStruct2PbMessageReq struct {
 	GoStruct string `json:"go_struct"`
 }
+
+// ConvertGoStruct2JsonReq 将 golang 结构体转换为 json 请求
+type ConvertGoStruct2JsonReq struct {
+	GoStruct string `json:"go_struct"`
+}

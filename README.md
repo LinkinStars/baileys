@@ -79,9 +79,12 @@ type FieldData struct {
 使用很简单，只需要将 struct 复制到左边，然后点击转换即可
 
 ## TODO
-- [ ] go struct 转 json
+- [x] go struct 转 json
+    - [ ] 支持嵌套结构体转换
+    - [ ] 支持无 json tag 结构体自动生成 tag 后转换
+    - [ ] 支持数组元素默认值
 - [x] json 转 go struct (使用 https://github.com/mholt/json-to-go 实现)
 - [ ] 首页页面展示优化
 - [ ] 启动和关闭方式优化
 - [ ] pb 转 golang struct
-- [ ] 自动生成 golang struct 和 pb 对象的转换function
+- [ ] 自动生成 golang struct 和 pb 对象的转换 function

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>baileys</title>
+    
+    <script crossorigin="anonymous" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" src="https://lib.baomitu.com/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.0.1/build/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- 页头 -->
+    <div class="row">
+        <div class="col-md-10">
+            <div class="page-header">
+                <h1>Baileys<small> 代码自动生成工具 —— golang struct 生成 json </small></h1>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 模板列表 -->
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                    <div id="go_struct_input" class="editor">// T 测试结构体 
+type T struct {
+    // F1测试字段
+    F1 bool        `json:"f1"`
+    // F2测试字段
+    F2 int         `json:"f2"`
+    // F3测试字段
+    F3 int8        `json:"f3"`
+    // F4测试字段
+    F4 int16       `json:"f4"`
+    // F5测试字段
+    F5 int32       `json:"f5"`
+    // F6测试字段
+    F6 int64       `json:"f6"`
+    // F7测试字段
+    F7 uint        `json:"f7"`
+    // F8测试字段
+    F8 uint8       `json:"f8"`
+    // F9测试字段
+    F9 uint16      `json:"f9"`
+    // F10测试字段
+    F10 uint32     `json:"f10"`
+    // F11测试字段
+    F11 uint64     `json:"f11"`
+    // F12测试字段
+    F12 uintptr    `json:"f12"`
+    // F13测试字段
+    F13 float32    `json:"f13"`
+    // F14测试字段
+    F14 float64    `json:"f14"`
+    // F15测试字段
+    F15 complex64  `json:"f15"`
+    // F16测试字段
+    F16 complex128 `json:"f16"`
+    // F17测试字段
+    F17 interface{}  `json:"f17"`
+    // F18测试字段
+    F18 map[string]string  `json:"f18"`
+    // F19测试字段
+    F19 string  `json:"f19"`
+    // F20测试字段
+    F20 []string  `json:"f20"`
+    // F21测试字段
+    F21 struct{}  `json:"f21"`
+    // F22测试字段
+    F22 User  `json:"f22"`
+}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="top: 200px; left: 75px;">
+            <button type="button" class="btn btn-success" onclick="gen()"> 点击转换-> </button><br><br><br><br>
+            <button type="button" class="btn btn-info" id="clipboard" data-container="body" data-toggle="popover" data-placement="bottom" data-content="复制成功">
+                点击复制->
+            </button>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <div id="json_code" class="editor"></div>
+            </div>
+        </div>
+        <textarea id="clipboard-content" style="position: absolute;top: 1000px;resize: none;background:none;border-style:none;"></textarea>
+    </div>
+</div>
+
+
+<style>
+    .editor {
+        height: 800px;
+        margin: 0 20px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+<script>
+    var go_struct_input_editor = ace.edit("go_struct_input");
+    go_struct_input_editor.setTheme("ace/theme/monokai");
+    go_struct_input_editor.getSession().setMode("ace/mode/golang");
+    go_struct_input_editor.setOptions({
+      fontSize: "10pt"
+    });
+
+    var json_code_editor = ace.edit("json_code");
+    json_code_editor.setTheme("ace/theme/monokai");
+    json_code_editor.getSession().setMode("ace/mode/json");
+    json_code_editor.setOptions({
+      fontSize: "10pt"
+    });
+    
+    // 点击生成
+    function gen() {
+        $.ajax({
+            url: '/gen/go/json',
+            type: 'post',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({                  
+                go_struct: go_struct_input_editor.getValue()
+            }),
+            success: function(result){
+                json_code_editor.setValue(JSON.stringify(JSON.parse(result.data), null, 2));
+            },error: function (e) {
+                alert(e.statusText)
+            }
+        })
+    }
+    
+    $('#clipboard').on('click', function() {
+      var copyTextarea = document.querySelector('#clipboard-content');
+      copyTextarea.value = json_code_editor.getValue();
+      copyTextarea.select();
+      document.execCommand('copy');
+      // Reset textarea
+      copyTextarea.value = "";
+    });
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+</script>
+</body>
+</html>

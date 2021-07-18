@@ -140,3 +140,21 @@ func ConvertGoStruct2PbMessage(ctx *gin.Context) {
 		util.SendResp(ctx, 200, 200, "生成成功", message)
 	}
 }
+
+// ConvertGoStruct2Json 将 golang 结构体转换为 json
+func ConvertGoStruct2Json(ctx *gin.Context) {
+	req := &entity.ConvertGoStruct2JsonReq{}
+	if err := ctx.Bind(req); err != nil {
+		_ = ctx.Error(err)
+		return
+	}
+
+	structList, err := parsing.StructParser(req.GoStruct)
+	if err != nil {
+		util.SendFailResp(ctx, "生成失败："+err.Error())
+		return
+	}
+
+	jsonStr := converter.GoStruct2Json(structList)
+	util.SendResp(ctx, 200, 200, "生成成功", jsonStr)
+}

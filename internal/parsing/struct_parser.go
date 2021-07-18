@@ -21,6 +21,20 @@ type StructField struct {
 	Name    string
 	Type    string
 	Comment string
+	Tag     string
+}
+
+func (s *StructField) GetTag(tagName string) string {
+	arr := strings.Split(s.Tag, " ")
+	for _, tag := range arr {
+		tag = strings.TrimSpace(tag)
+		if strings.HasPrefix(tag, tagName) {
+			tag = strings.TrimLeft(tag, tagName+":")
+			tag = strings.Trim(tag, "\"")
+			return tag
+		}
+	}
+	return ""
 }
 
 const (
@@ -62,6 +76,9 @@ func StructParser(src string) (structList []*StructFlat, err error) {
 						structType := typeSpec.Type.(*ast.StructType)
 						for _, reField := range structType.Fields.List {
 							structField := &StructField{}
+							if reField.Tag != nil {
+								structField.Tag = strings.Trim(reField.Tag.Value, "`")
+							}
 							switch reField.Type.(type) {
 							case *ast.Ident:
 								iDent := reField.Type.(*ast.Ident)
@@ -91,7 +108,7 @@ func StructParser(src string) (structList []*StructFlat, err error) {
 								structField.Name = name.Name
 								structField.Comment = strings.TrimSpace(reField.Doc.Text())
 								structFlat.Fields = append(structFlat.Fields, structField)
-								log.Printf("name=%s type=%s comment=%s\n", name.Name, structField.Type, structField.Comment)
+								log.Printf("name=%s type=%s comment=%s tag=%s\n", name.Name, structField.Type, structField.Comment, structField.Tag)
 							}
 						}
 					}

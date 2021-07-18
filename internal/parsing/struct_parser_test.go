@@ -2,6 +2,7 @@ package parsing
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -34,9 +35,15 @@ type T struct {
 
 type name struct {
 }
+
+type User struct {
+	Name string ${backquote}json:"name"${backquote}
+	Age int ${backquote}json:"age"${backquote}
+}
 `
 
 func TestStructParser(t *testing.T) {
+	structStr := strings.Replace(src, "${backquote}", "`", -1)
 	type args struct {
 		src string
 	}
@@ -49,7 +56,7 @@ func TestStructParser(t *testing.T) {
 		{
 			name: "1",
 			args: args{
-				src: src,
+				src: structStr,
 			},
 			wantStructList: nil,
 			wantErr:        false,

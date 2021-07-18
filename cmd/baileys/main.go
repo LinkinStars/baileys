@@ -46,9 +46,11 @@ func main() {
 	router.GET("/converter/sql/code", handle.ConverterSql2Code)
 	router.GET("/converter/go/pb", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "struct_2_pb.html", "") })
 	router.GET("/converter/json/go", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "json_2_struct.html", "") })
+	router.GET("/converter/go/json", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "struct_2_json.html", "") })
 
 	router.POST("/gen/sql/code", handle.GenCode)
 	router.POST("/gen/go/pb", handle.ConvertGoStruct2PbMessage)
+	router.POST("/gen/go/json", handle.ConvertGoStruct2Json)
 
 	if err := util.OpenBrowser("http://127.0.0.1:" + cache.WebPort + "/"); err != nil {
 		log.Print("open browser error : ", err)
