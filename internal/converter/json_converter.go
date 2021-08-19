@@ -9,11 +9,14 @@ import (
 
 // GoStruct2Json convert golang struct to json
 func GoStruct2Json(structList []*parsing.StructFlat) (jsonStr string) {
-	//existMapping := make(map[string]interface{}, len(structList))
 	for _, s := range structList {
 		jsonMap := make(map[string]interface{})
 		for _, field := range s.Fields {
 			tag := field.GetTag("json")
+			// ignore json tag is `json:"-"`
+			if tag == "-" {
+				continue
+			}
 			jsonMap[tag] = GoType2JsonDefaultValue(field.Type)
 		}
 		jsonBytes, _ := json.Marshal(jsonMap)
