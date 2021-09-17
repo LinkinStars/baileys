@@ -84,6 +84,7 @@ type FieldData struct {
     - [ ] 支持无 json tag 结构体自动生成 tag 后转换
     - [ ] 支持数组元素默认值
     - [x] 忽略 json tag 为 '-' 的情况
+    - [ ] 忽略 json tag 包含的 'omitempty'
 - [x] json 转 go struct (使用 https://github.com/mholt/json-to-go 实现)
 - [ ] 首页页面展示优化
 - [ ] 启动和关闭方式优化
