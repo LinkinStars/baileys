@@ -28,9 +28,9 @@ func GoStruct2Json(structList []*parsing.StructFlat) (jsonStr string) {
 	// 再次遍历每个结构体，获取其中嵌套的结构
 	for _, s := range structList {
 		for _, field := range s.Fields {
-			tag := field.GetJsonTag()
 			// 如果当前的类型是别的一个结构体的名称，证明当前结构体嵌套了另一个结构体
 			if t, ok := allJsonMap[field.Type]; ok {
+				tag := field.GetJsonTag()
 				allJsonMap[s.Name][tag] = t
 				allStructRootFlag[field.Type] = false
 			}

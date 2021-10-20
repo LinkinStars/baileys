@@ -43,6 +43,9 @@ func (s *StructField) GetJsonTag() string {
 	if tag == "-" {
 		return ""
 	}
+	if len(tag) == 0 {
+		return s.Name
+	}
 	return tag
 }
 
