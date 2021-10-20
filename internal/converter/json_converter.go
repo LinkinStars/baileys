@@ -9,19 +9,46 @@ import (
 
 // GoStruct2Json convert golang struct to json
 func GoStruct2Json(structList []*parsing.StructFlat) (jsonStr string) {
+	// 所有结构体 json 序列化的数据
+	allJsonMap := make(map[string]map[string]interface{})
+	// 用于标识是否为根节点结构体
+	allStructRootFlag := make(map[string]bool)
+
+	// 首先遍历所有结构体，将所有结构体序列化为 json 数据并保存
 	for _, s := range structList {
 		jsonMap := make(map[string]interface{})
 		for _, field := range s.Fields {
-			tag := field.GetTag("json")
-			// ignore json tag is `json:"-"`
-			if tag == "-" {
-				continue
-			}
+			tag := field.GetJsonTag()
 			jsonMap[tag] = GoType2JsonDefaultValue(field.Type)
 		}
-		jsonBytes, _ := json.Marshal(jsonMap)
-		jsonStr = string(jsonBytes)
+		allJsonMap[s.Name] = jsonMap
+		allStructRootFlag[s.Name] = true
 	}
+
+	// 再次遍历每个结构体，获取其中嵌套的结构
+	for _, s := range structList {
+		for _, field := range s.Fields {
+			tag := field.GetJsonTag()
+			// 如果当前的类型是别的一个结构体的名称，证明当前结构体嵌套了另一个结构体
+			if t, ok := allJsonMap[field.Type]; ok {
+				allJsonMap[s.Name][tag] = t
+				allStructRootFlag[field.Type] = false
+			}
+		}
+	}
+
+	// 找到根节点结构体
+	rootStructName := ""
+	for root, ok := range allStructRootFlag {
+		if ok {
+			rootStructName = root
+			break
+		}
+	}
+
+	// 最终输出根节点结构体所对应的 json
+	jsonBytes, _ := json.Marshal(allJsonMap[rootStructName])
+	jsonStr = string(jsonBytes)
 	return jsonStr
 }
 

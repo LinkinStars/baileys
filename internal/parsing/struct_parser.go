@@ -37,6 +37,15 @@ func (s *StructField) GetTag(tagName string) string {
 	return ""
 }
 
+func (s *StructField) GetJsonTag() string {
+	tag := s.GetTag("json")
+	// ignore json tag is `json:"-"`
+	if tag == "-" {
+		return ""
+	}
+	return tag
+}
+
 const (
 	InterfaceTypeDef = "interface"
 	StructTypeDef    = "struct"
