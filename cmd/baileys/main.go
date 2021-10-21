@@ -46,6 +46,7 @@ func main() {
 	router.GET("/converter/sql/code", handle.ConverterSql2Code)
 	router.GET("/converter/go/pb", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "struct_2_pb.html", "") })
 	router.GET("/converter/json/go", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "json_2_struct.html", "") })
+	router.GET("/converter/yaml/go", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "yaml_2_struct.html", "") })
 	router.GET("/converter/go/json", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "struct_2_json.html", "") })
 
 	router.POST("/gen/sql/code", handle.GenCode)

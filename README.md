@@ -88,4 +88,4 @@ type FieldData struct {
 - [ ] 启动和关闭方式优化
 - [ ] pb 转 golang struct
 - [ ] 自动生成 golang struct 和 pb 对象的转换 function
-- [ ] yaml 转 go struct (https://zhwt.github.io/yaml-to-go/)
+- [x] yaml 转 go struct (https://zhwt.github.io/yaml-to-go/)
