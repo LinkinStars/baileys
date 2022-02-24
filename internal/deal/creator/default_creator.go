@@ -101,11 +101,11 @@ func colSQLType(col *core.Column) string {
 	nstr := col.SQLType.Name
 	if col.Length != 0 {
 		if col.Length2 != 0 {
-			nstr += fmt.Sprintf("(%v,%v)", col.Length, col.Length2)
+			nstr += fmt.Sprintf("(%d,%d)", col.Length, col.Length2)
 		} else {
-			nstr += fmt.Sprintf("(%v)", col.Length)
+			nstr += fmt.Sprintf("(%d)", col.Length)
 		}
-	} else if len(col.EnumOptions) > 0 { //enum
+	} else if len(col.EnumOptions) > 0 {
 		nstr += "("
 		opts := ""
 
@@ -116,11 +116,11 @@ func colSQLType(col *core.Column) string {
 		sort.Strings(enumOptions)
 
 		for _, v := range enumOptions {
-			opts += fmt.Sprintf(",'%v'", v)
+			opts += fmt.Sprintf(",'%s'", v)
 		}
 		nstr += strings.TrimLeft(opts, ",")
 		nstr += ")"
-	} else if len(col.SetOptions) > 0 { //enum
+	} else if len(col.SetOptions) > 0 {
 		nstr += "("
 		opts := ""
 
