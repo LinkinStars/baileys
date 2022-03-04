@@ -7,6 +7,8 @@ import (
 	"go/token"
 	"log"
 	"strings"
+
+	"github.com/LinkinStars/baileys/internal/util"
 )
 
 // StructFlat 非嵌套结构体
@@ -102,7 +104,8 @@ func StructParser(src string) (structList []*StructFlat, err error) {
 								structField.Type = fmt.Sprintf("map[%s]%s", iDent.Key, iDent.Value)
 							case *ast.ArrayType:
 								iDent := reField.Type.(*ast.ArrayType)
-								structField.Type = fmt.Sprintf("[]%s", iDent.Elt)
+								iDentElem := util.ReflectAccess(iDent.Elt)
+								structField.Type = fmt.Sprintf("[]%s", iDentElem)
 							case *ast.StructType:
 								structField.Type = StructTypeDef
 							case *ast.SelectorExpr:
