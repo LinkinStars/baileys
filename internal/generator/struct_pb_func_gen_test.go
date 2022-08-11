@@ -60,7 +60,7 @@ func TestGenerateStruct2PBFunc(t *testing.T) {
 				return
 			}
 			if gotRes != tt.wantRes {
-				//t.Errorf("GenerateStruct2PBFunc() gotRes = %v, want %v", gotRes, tt.wantRes)
+				t.Errorf("GenerateStruct2PBFunc() gotRes = %v, want %v", gotRes, tt.wantRes)
 			}
 		})
 	}
