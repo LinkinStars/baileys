@@ -3,7 +3,6 @@ package creator
 import (
 	"fmt"
 	"sort"
-	"strconv"
 	"strings"
 
 	"xorm.io/core"
@@ -11,15 +10,15 @@ import (
 
 var created, updated, deleted = []string{"created_at"}, []string{"updated_at"}, []string{"deleted_at"}
 
-// DefaultStructInfoCreator 默认创建者实现，生成 XORM, validatorV9用的相对应的标签
-type DefaultStructInfoCreator struct {
+// XormStructInfoCreator 生成 xorm 相关标签和结构体
+type XormStructInfoCreator struct {
 	Column  *core.Column
 	Table   *core.Table
 	typeStr string
 }
 
 // CreateTypeString 生成字段的数据类型
-func (d *DefaultStructInfoCreator) CreateTypeString() string {
+func (d *XormStructInfoCreator) CreateTypeString() string {
 	st := d.Column.SQLType
 	t := core.SQLType2Type(st)
 	s := t.String()
@@ -31,7 +30,7 @@ func (d *DefaultStructInfoCreator) CreateTypeString() string {
 }
 
 // CreateORMTag 生成字段的orm框架标签
-func (d *DefaultStructInfoCreator) CreateORMTag() string {
+func (d *XormStructInfoCreator) CreateORMTag() string {
 	col := d.Column
 	var res []string
 	if !col.Nullable {
@@ -149,26 +148,6 @@ func include(source []string, target string) bool {
 }
 
 // CreateValTag 生成字段的val框架标签
-func (d *DefaultStructInfoCreator) CreateValTag() string {
-	tag := "validate:"
-
-	if d.Column.Nullable {
-		tag += `"omitempty`
-	} else {
-		tag += `"required`
-	}
-
-	if d.Column.SQLType.Name == core.Enum {
-		tag += ",oneof="
-		for option := range d.Column.EnumOptions {
-			tag += option + " "
-		}
-		tag = strings.TrimSpace(tag) + `"`
-	} else if strings.EqualFold(d.typeStr, "string") && d.Column.Length > 0 {
-		tag += `,gt=0,lte=` + strconv.Itoa(d.Column.Length) + `"`
-	} else {
-		tag += `"`
-	}
-	tag += ` comment:"` + d.Column.Comment + `"`
-	return tag
+func (d *XormStructInfoCreator) CreateValTag() string {
+	return CreateValidatorTag(d.Column, d.typeStr)
 }

@@ -3,11 +3,11 @@ package deal
 import (
 	"strings"
 
+	creator2 "github.com/LinkinStars/baileys/internal/creator"
 	"github.com/go-xorm/xorm"
 	"xorm.io/core"
 
 	"github.com/LinkinStars/baileys/internal/conf"
-	"github.com/LinkinStars/baileys/internal/deal/creator"
 	"github.com/LinkinStars/baileys/internal/entity"
 	"github.com/LinkinStars/baileys/internal/util"
 )
@@ -89,22 +89,18 @@ func createFieldData(column *core.Column, table *core.Table) entity.FieldData {
 	fd.Comment = column.Comment
 
 	// 根据配置选择不同的orm框架实现
-	var infoCreator creator.StructInfoCreator
-	if conf.All.ORMName == conf.GORMName {
-		infoCreator = &creator.MyStructInfoCreatorForGORM{
-			Column: column,
-			Table:  table,
-		}
-	} else {
-		infoCreator = &creator.DefaultStructInfoCreator{
-			Column: column,
-			Table:  table,
-		}
+	var infoCreator creator2.StructInfoCreator
+	switch conf.All.ORMName {
+	case conf.GORMName:
+		infoCreator = &creator2.GormStructInfoCreator{Column: column, Table: table}
+	case conf.XORMName:
+		infoCreator = &creator2.XormStructInfoCreator{Column: column, Table: table}
+	default:
+		infoCreator = &creator2.XormStructInfoCreator{Column: column, Table: table}
 	}
 
 	fd.Type = infoCreator.CreateTypeString()
 	fd.ORMTag = infoCreator.CreateORMTag()
 	fd.ValTag = infoCreator.CreateValTag()
-
 	return fd
 }

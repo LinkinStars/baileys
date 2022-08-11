@@ -10,8 +10,8 @@ import (
 	"github.com/LinkinStars/baileys/internal/entity"
 )
 
-// gen 开始生成
-func gen(chooseTableMap, chooseTplMap map[string]bool) (err error) {
+// GenGoCodeFromDBInfo 根据数据库表结构生成对应的代码
+func GenGoCodeFromDBInfo(chooseTableMap, chooseTplMap map[string]bool) (err error) {
 	// 循环一遍数据表，确定用户选中的表
 	userChooseTable := make([]*entity.TableData, 0)
 	for _, v := range cache.TableData {
@@ -34,7 +34,6 @@ func gen(chooseTableMap, chooseTplMap map[string]bool) (err error) {
 	if err != nil {
 		return
 	}
-
 	return
 }
 

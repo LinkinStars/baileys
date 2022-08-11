@@ -111,8 +111,8 @@ func ConvertSql2GoCode(ctx *gin.Context) {
 		chooseTplMap[tplName] = true
 	}
 
-	// 生成
-	if err := gen(chooseTableMap, chooseTplMap); err != nil {
+	// 生成代码
+	if err := GenGoCodeFromDBInfo(chooseTableMap, chooseTplMap); err != nil {
 		util.SendFailResp(ctx, "生成失败："+err.Error())
 	} else {
 		util.SendSuccessResp(ctx, "生成成功~!")

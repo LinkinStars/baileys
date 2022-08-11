@@ -2,21 +2,20 @@ package creator
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"xorm.io/core"
 )
 
-// MyStructInfoCreatorForGORM 创建者实现，生成 GORM, validatorV9用的相对应的标签
-type MyStructInfoCreatorForGORM struct {
+// GormStructInfoCreator 生成 gorm 相关标签和结构体
+type GormStructInfoCreator struct {
 	Column  *core.Column
 	Table   *core.Table
 	typeStr string
 }
 
 // CreateTypeString 生成字段的数据类型
-func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
+func (d *GormStructInfoCreator) CreateTypeString() string {
 	colName := strings.ToLower(d.Column.Name)
 	if colName == "deleted" || colName == "deleted_at" {
 		return "gorm.DeletedAt"
@@ -35,7 +34,7 @@ func (d *MyStructInfoCreatorForGORM) CreateTypeString() string {
 }
 
 // CreateORMTag 生成字段的orm框架标签
-func (d *MyStructInfoCreatorForGORM) CreateORMTag() string {
+func (d *GormStructInfoCreator) CreateORMTag() string {
 	col := d.Column
 	sqlTypeStr := colSQLType(col)
 
@@ -59,26 +58,6 @@ func (d *MyStructInfoCreatorForGORM) CreateORMTag() string {
 }
 
 // CreateValTag 生成字段的val框架标签
-func (d *MyStructInfoCreatorForGORM) CreateValTag() string {
-	tag := "validate:"
-
-	if d.Column.Nullable {
-		tag += `"omitempty`
-	} else {
-		tag += `"required`
-	}
-
-	if d.Column.SQLType.Name == core.Enum {
-		tag += ",oneof="
-		for option := range d.Column.EnumOptions {
-			tag += option + " "
-		}
-		tag = strings.TrimSpace(tag) + `"`
-	} else if strings.EqualFold(d.typeStr, "string") && d.Column.Length > 0 {
-		tag += `,gt=0,lte=` + strconv.Itoa(d.Column.Length) + `"`
-	} else {
-		tag += `"`
-	}
-	tag += ` comment:"` + d.Column.Comment + `"`
-	return tag
+func (d *GormStructInfoCreator) CreateValTag() string {
+	return CreateValidatorTag(d.Column, d.typeStr)
 }
