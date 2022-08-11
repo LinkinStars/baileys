@@ -49,7 +49,7 @@ func main() {
 	router.GET("/converter/yaml/go", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "yaml_2_struct.html", "") })
 	router.GET("/converter/go/json", func(ctx *gin.Context) { ctx.HTML(http.StatusOK, "struct_2_json.html", "") })
 
-	router.POST("/gen/sql/code", handle.GenCode)
+	router.POST("/gen/sql/code", handle.ConvertSql2GoCode)
 	router.POST("/gen/go/pb", handle.ConvertGoStruct2PbMessage)
 	router.POST("/gen/go/json", handle.ConvertGoStruct2Json)
 

@@ -1,6 +1,7 @@
 package handle
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"strings"
@@ -93,8 +94,8 @@ func ConverterSql2Code(context *gin.Context) {
 	context.HTML(http.StatusOK, "sql_2_code.html", data)
 }
 
-// GenCode 代码生成
-func GenCode(ctx *gin.Context) {
+// ConvertSql2GoCode 将 sql 数据转换为对应模板的 go 代码
+func ConvertSql2GoCode(ctx *gin.Context) {
 	genReq := &entity.GenReq{}
 	if err := ctx.Bind(genReq); err != nil {
 		fmt.Println(err)
@@ -136,9 +137,20 @@ func ConvertGoStruct2PbMessage(ctx *gin.Context) {
 	message, err := generator.GenPBMessage(pbList)
 	if err != nil {
 		util.SendFailResp(ctx, "生成失败："+err.Error())
-	} else {
-		util.SendResp(ctx, 200, 200, "生成成功", message)
+		return
 	}
+	convertFunc, err := generator.GenerateStruct2PBFunc(structList)
+	if err != nil {
+		util.SendFailResp(ctx, "生成失败："+err.Error())
+		return
+	}
+
+	buf := bytes.NewBufferString(message)
+	buf.WriteString("\n")
+	buf.WriteString(strings.Repeat("-", 20))
+	buf.WriteString("\n\n")
+	buf.WriteString(convertFunc)
+	util.SendResp(ctx, 200, 200, "生成成功", buf.String())
 }
 
 // ConvertGoStruct2Json 将 golang 结构体转换为 json

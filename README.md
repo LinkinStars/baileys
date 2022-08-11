@@ -85,6 +85,5 @@ type FieldData struct {
     - [x] 忽略 json tag 为 '-' 的情况
 - [x] json 转 go struct (使用 https://github.com/mholt/json-to-go 实现)
 - [x] 首页页面展示优化
-- [ ] pb 转 golang struct
-- [ ] 自动生成 golang struct 和 pb 对象的转换 function
+- [x] 自动生成 golang struct 和 pb 对象的转换 function
 - [x] yaml 转 go struct (https://zhwt.github.io/yaml-to-go/)

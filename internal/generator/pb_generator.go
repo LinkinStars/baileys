@@ -2,7 +2,6 @@ package generator
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"text/template"
 
@@ -23,6 +22,7 @@ const (
 `
 )
 
+// GenPBMessage 生成 pb message 结构
 func GenPBMessage(flatList []*converter.PBFlat) (res string, err error) {
 	t, err := template.New("pb.tpl").Parse(pbTpl)
 	if err != nil {
@@ -38,6 +38,5 @@ func GenPBMessage(flatList []*converter.PBFlat) (res string, err error) {
 		}
 		resBytes.WriteString("\n")
 	}
-	fmt.Println(resBytes.String())
 	return resBytes.String(), nil
 }
