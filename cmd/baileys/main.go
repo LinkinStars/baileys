@@ -38,7 +38,7 @@ func main() {
 		panic(err.Error())
 	}
 	router.SetHTMLTemplate(t)
-	router.StaticFS("/static/", http.FS(staticFS))
+	router.StaticFS("/assert/", http.FS(staticFS))
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", "")
