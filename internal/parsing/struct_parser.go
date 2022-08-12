@@ -11,6 +11,12 @@ import (
 	"github.com/LinkinStars/baileys/internal/util"
 )
 
+const (
+	InterfaceTypeDef = "interface"
+	StructTypeDef    = "struct"
+	TimeTypeDef      = "time.Time"
+)
+
 // StructFlat 非嵌套结构体
 type StructFlat struct {
 	Name    string
@@ -26,6 +32,7 @@ type StructField struct {
 	Tag     string
 }
 
+// GetTag 获取tag
 func (s *StructField) GetTag(tagName string) string {
 	arr := strings.Split(s.Tag, " ")
 	for _, tag := range arr {
@@ -39,6 +46,7 @@ func (s *StructField) GetTag(tagName string) string {
 	return ""
 }
 
+// GetJsonTag 获取json tag
 func (s *StructField) GetJsonTag() string {
 	tag := s.GetTag("json")
 	// ignore json tag is `json:"-"`
@@ -50,12 +58,6 @@ func (s *StructField) GetJsonTag() string {
 	}
 	return tag
 }
-
-const (
-	InterfaceTypeDef = "interface"
-	StructTypeDef    = "struct"
-	TimeTypeDef      = "time.Time"
-)
 
 // StructParser golang struct 解析器
 func StructParser(src string) (structList []*StructFlat, err error) {

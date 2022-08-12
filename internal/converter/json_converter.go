@@ -7,6 +7,32 @@ import (
 	"github.com/LinkinStars/baileys/internal/parsing"
 )
 
+var (
+	go2jsonDefaultValueMapping = map[string]interface{}{
+		"float32":    0.01,
+		"float64":    0.01,
+		"complex64":  0.01,
+		"complex128": 0.01,
+		"int":        0,
+		"int8":       0,
+		"int16":      0,
+		"int32":      0,
+		"int64":      0,
+		"uint":       0,
+		"uint8":      0,
+		"uint16":     0,
+		"uint32":     0,
+		"uint64":     0,
+		"bool":       true,
+		"string":     "",
+		"[]byte":     "",
+		"uintptr":    nil,
+		"interface":  nil,
+		"struct":     "",
+		"time.Time":  "",
+	}
+)
+
 // GoStruct2Json convert golang struct to json
 func GoStruct2Json(structList []*parsing.StructFlat) (jsonStr string) {
 	// 所有结构体 json 序列化的数据
@@ -68,29 +94,3 @@ func GoType2JsonDefaultValue(goType string) (jsonDefaultValue interface{}) {
 	}
 	return nil
 }
-
-var (
-	go2jsonDefaultValueMapping = map[string]interface{}{
-		"float32":    0.01,
-		"float64":    0.01,
-		"complex64":  0.01,
-		"complex128": 0.01,
-		"int":        0,
-		"int8":       0,
-		"int16":      0,
-		"int32":      0,
-		"int64":      0,
-		"uint":       0,
-		"uint8":      0,
-		"uint16":     0,
-		"uint32":     0,
-		"uint64":     0,
-		"bool":       true,
-		"string":     "",
-		"[]byte":     "",
-		"uintptr":    nil,
-		"interface":  nil,
-		"struct":     "",
-		"time.Time":  "",
-	}
-)

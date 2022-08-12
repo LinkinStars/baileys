@@ -7,6 +7,32 @@ import (
 	"github.com/LinkinStars/baileys/internal/parsing"
 )
 
+var (
+	go2pbTypeMapping = map[string]string{
+		"float32":    "float",
+		"float64":    "double",
+		"complex64":  "double",
+		"complex128": "double",
+		"int":        "int32",
+		"int8":       "int32",
+		"int16":      "int32",
+		"int32":      "int32",
+		"int64":      "int64",
+		"uint":       "uint32",
+		"uint8":      "uint32",
+		"uint16":     "uint32",
+		"uint32":     "uint32",
+		"uint64":     "uint64",
+		"bool":       "bool",
+		"string":     "string",
+		"[]byte":     "bytes",
+		"uintptr":    "bytes",
+		"interface":  "bytes",
+		"struct":     "bytes",
+		"time.Time":  "google.protobuf.Timestamp",
+	}
+)
+
 // PBFlat pb struct
 type PBFlat struct {
 	Name        string
@@ -88,29 +114,3 @@ func GoType2PB(goType string) (pbType string) {
 	// 其他情况可能为嵌套结构，直接返回原类型
 	return goType
 }
-
-var (
-	go2pbTypeMapping = map[string]string{
-		"float32":    "float",
-		"float64":    "double",
-		"complex64":  "double",
-		"complex128": "double",
-		"int":        "int32",
-		"int8":       "int32",
-		"int16":      "int32",
-		"int32":      "int32",
-		"int64":      "int64",
-		"uint":       "uint32",
-		"uint8":      "uint32",
-		"uint16":     "uint32",
-		"uint32":     "uint32",
-		"uint64":     "uint64",
-		"bool":       "bool",
-		"string":     "string",
-		"[]byte":     "bytes",
-		"uintptr":    "bytes",
-		"interface":  "bytes",
-		"struct":     "bytes",
-		"time.Time":  "google.protobuf.Timestamp",
-	}
-)
