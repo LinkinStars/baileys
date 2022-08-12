@@ -18,6 +18,7 @@ import (
 func init() {
 	flag.StringVar(&cache.ConfPath, "c", "./conf/conf.yml", "default config path")
 	flag.StringVar(&cache.WebPort, "p", "5272", "default web port")
+	flag.BoolVar(&cache.OpenBrowser, "o", false, "if open browser")
 }
 
 //go:embed templates
@@ -37,7 +38,6 @@ func main() {
 		panic(err.Error())
 	}
 	router.SetHTMLTemplate(t)
-	//router.LoadHTMLGlob("templates/*.html")
 	router.StaticFS("/static/", http.FS(staticFS))
 
 	router.GET("/", func(ctx *gin.Context) {
@@ -53,8 +53,10 @@ func main() {
 	router.POST("/gen/go/pb", handle.ConvertGoStruct2PbMessage)
 	router.POST("/gen/go/json", handle.ConvertGoStruct2Json)
 
-	if err := util.OpenBrowser("http://127.0.0.1:" + cache.WebPort + "/"); err != nil {
-		log.Print("open browser error : ", err)
+	if cache.OpenBrowser {
+		if err := util.OpenBrowser("http://127.0.0.1:" + cache.WebPort + "/"); err != nil {
+			log.Print("open browser error : ", err)
+		}
 	}
 
 	err = router.Run(":" + cache.WebPort)

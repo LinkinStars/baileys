@@ -24,4 +24,6 @@ var (
 	ConfPath = "./conf/conf.yml"
 	// WebPort 默认端口号
 	WebPort = "5272"
+	// OpenBrowser 是否打开浏览器
+	OpenBrowser = false
 )
