@@ -3,14 +3,13 @@ package creator
 import (
 	"fmt"
 	"strings"
-
-	"xorm.io/core"
+	"xorm.io/xorm/schemas"
 )
 
 // GormStructInfoCreator 生成 gorm 相关标签和结构体
 type GormStructInfoCreator struct {
-	Column  *core.Column
-	Table   *core.Table
+	Column  *schemas.Column
+	Table   *schemas.Table
 	typeStr string
 }
 
@@ -21,7 +20,7 @@ func (d *GormStructInfoCreator) CreateTypeString() string {
 		return "gorm.DeletedAt"
 	}
 	st := d.Column.SQLType
-	t := core.SQLType2Type(st)
+	t := schemas.SQLType2Type(st)
 	s := t.String()
 	if s == "[]uint8" {
 		return "[]byte"

@@ -1,11 +1,12 @@
 package deal
 
 import (
+	"github.com/LinkinStars/baileys/internal/creator"
 	"strings"
+	"xorm.io/xorm/names"
+	"xorm.io/xorm/schemas"
 
-	creator2 "github.com/LinkinStars/baileys/internal/creator"
-	"github.com/go-xorm/xorm"
-	"xorm.io/core"
+	"xorm.io/xorm"
 
 	"github.com/LinkinStars/baileys/internal/conf"
 	"github.com/LinkinStars/baileys/internal/entity"
@@ -22,7 +23,7 @@ var (
 )
 
 // GetRawTablesData 获取源数据
-func GetRawTablesData(connection string) (tables []*core.Table, err error) {
+func GetRawTablesData(connection string) (tables []*schemas.Table, err error) {
 	// 修改为配置文件读取
 	engine, err := xorm.NewEngine("mysql", connection)
 	if err != nil {
@@ -32,7 +33,7 @@ func GetRawTablesData(connection string) (tables []*core.Table, err error) {
 	if err = engine.Ping(); err != nil {
 		return nil, err
 	}
-	engine.SetColumnMapper(core.GonicMapper{})
+	engine.SetColumnMapper(names.GonicMapper{})
 	// 获取数据库中所有表的各种信息
 	tables, err = engine.DBMetas()
 	if err != nil {
@@ -42,7 +43,7 @@ func GetRawTablesData(connection string) (tables []*core.Table, err error) {
 }
 
 // ConvertRawData2Model 将原数据转换成模型
-func ConvertRawData2Model(tables []*core.Table) (tableData []*entity.TableData) {
+func ConvertRawData2Model(tables []*schemas.Table) (tableData []*entity.TableData) {
 	tableData = make([]*entity.TableData, 0, len(tables))
 	for _, table := range tables {
 		td := createTableData(table.Name, table.Comment)
@@ -74,7 +75,7 @@ func createTableData(tableName, tableComment string) *entity.TableData {
 	return td
 }
 
-func createFieldData(column *core.Column, table *core.Table) entity.FieldData {
+func createFieldData(column *schemas.Column, table *schemas.Table) entity.FieldData {
 	fd := entity.FieldData{}
 
 	// 如果用户的命名是小驼峰就用小驼峰转大驼峰
@@ -89,14 +90,14 @@ func createFieldData(column *core.Column, table *core.Table) entity.FieldData {
 	fd.Comment = column.Comment
 
 	// 根据配置选择不同的orm框架实现
-	var infoCreator creator2.StructInfoCreator
+	var infoCreator creator.StructInfoCreator
 	switch conf.All.ORMName {
 	case conf.GORMName:
-		infoCreator = &creator2.GormStructInfoCreator{Column: column, Table: table}
+		infoCreator = &creator.GormStructInfoCreator{Column: column, Table: table}
 	case conf.XORMName:
-		infoCreator = &creator2.XormStructInfoCreator{Column: column, Table: table}
+		infoCreator = &creator.XormStructInfoCreator{Column: column, Table: table}
 	default:
-		infoCreator = &creator2.XormStructInfoCreator{Column: column, Table: table}
+		infoCreator = &creator.XormStructInfoCreator{Column: column, Table: table}
 	}
 
 	fd.Type = infoCreator.CreateTypeString()

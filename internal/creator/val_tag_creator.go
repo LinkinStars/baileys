@@ -3,12 +3,13 @@ package creator
 import (
 	"strconv"
 	"strings"
+	"xorm.io/xorm/schemas"
 
 	"xorm.io/core"
 )
 
 // CreateValidatorTag 创建 https://github.com/go-playground/validator/ 对应 tag
-func CreateValidatorTag(column *core.Column, typeStr string) string {
+func CreateValidatorTag(column *schemas.Column, typeStr string) string {
 	tag := "validate:"
 
 	if column.Nullable {
@@ -24,7 +25,7 @@ func CreateValidatorTag(column *core.Column, typeStr string) string {
 		}
 		tag = strings.TrimSpace(tag) + `"`
 	} else if strings.EqualFold(typeStr, "string") && column.Length > 0 {
-		tag += `,gt=0,lte=` + strconv.Itoa(column.Length) + `"`
+		tag += `,gt=0,lte=` + strconv.FormatInt(column.Length, 10) + `"`
 	} else {
 		tag += `"`
 	}

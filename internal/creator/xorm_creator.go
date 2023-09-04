@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"xorm.io/xorm/schemas"
 
 	"xorm.io/core"
 )
@@ -12,15 +13,15 @@ var created, updated, deleted = []string{"created_at"}, []string{"updated_at"}, 
 
 // XormStructInfoCreator 生成 xorm 相关标签和结构体
 type XormStructInfoCreator struct {
-	Column  *core.Column
-	Table   *core.Table
+	Column  *schemas.Column
+	Table   *schemas.Table
 	typeStr string
 }
 
 // CreateTypeString 生成字段的数据类型
 func (d *XormStructInfoCreator) CreateTypeString() string {
 	st := d.Column.SQLType
-	t := core.SQLType2Type(st)
+	t := schemas.SQLType2Type(st)
 	s := t.String()
 	if s == "[]uint8" {
 		return "[]byte"
@@ -96,7 +97,7 @@ func (d *XormStructInfoCreator) CreateORMTag() string {
 	return ""
 }
 
-func colSQLType(col *core.Column) string {
+func colSQLType(col *schemas.Column) string {
 	nstr := col.SQLType.Name
 	if col.Length != 0 {
 		if col.Length2 != 0 {
